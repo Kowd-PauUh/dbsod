@@ -6,6 +6,11 @@
 #include "distances.h"
 
 void dbsod(double* data, int rows, int cols, const char* metric) {
+    // validate input
+    if (!data) {
+        throw std::invalid_argument("Input data pointer is null.");
+    }
+
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X(data, rows, cols);
     std::string metricStr(metric);
 
@@ -16,7 +21,7 @@ void dbsod(double* data, int rows, int cols, const char* metric) {
         distanceFn = it->second;
     } else {
         throw std::runtime_error(
-            "\"metric\" argument must be one of [\"euclidean\", \"manhattan\", \"cosine\"]"
+            "\"metric\" argument must be one of [\"euclidean\", \"manhattan\", \"cosine\"]."
         );
     }
 
