@@ -6,7 +6,7 @@ install_g++:
 # install eigen
 install_eigen:
 	@ sudo apt-get update
-	@ sudo apt-get install libeigen3-dev
+	@ sudo apt-get install libeigen3-dev -y
 
 # create .venv, install dependencies and dbsod in dev mode
 venv: 
@@ -16,6 +16,7 @@ venv:
 # build dbsod.so
 build:
 	@ mkdir -p dbsod/build
+	@ dpkg -s libeigen3-dev >/dev/null 2>&1 || ( $(MAKE) --no-print-directory install_eigen )
 	@ g++ -O3 -Wall -shared -std=c++11 \
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude -I/usr/include/eigen3 \
