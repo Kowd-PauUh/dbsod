@@ -1,7 +1,6 @@
-#include <iostream>
 #include "distances.h"
+#include <Eigen/Dense>
 
-void distance()
-{
-    std::cout << "Distance function call!\n";
+double euclidean(const Eigen::VectorXd& a, const Eigen::VectorXd& b) {
+    return (a - b).norm();
 }
