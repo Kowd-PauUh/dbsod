@@ -15,7 +15,3 @@ build:
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude \
 		  -o dbsod/build/dbsod.so
-
-# clean artifacts
-clean:
-	@ rm -rf bin/*
