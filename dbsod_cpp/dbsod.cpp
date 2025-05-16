@@ -11,6 +11,7 @@ void dbsod(double* data, int rows, int cols, const char* metric) {
         throw std::invalid_argument("Input data pointer is null.");
     }
 
+    // form appropriate data structures from given pointers 
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X(data, rows, cols);
     std::string metricStr(metric);
 
