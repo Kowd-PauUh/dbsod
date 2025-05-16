@@ -20,6 +20,11 @@ jobs:
 
       - name: Build release distributions
         run: |
+
+          # build dbsod.so
+          make build
+
+          # build python package
           python -m pip install --upgrade pip
           python -m pip install build setuptools
           python -m build
