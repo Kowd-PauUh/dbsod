@@ -12,7 +12,9 @@ license = {text = "Apache-2.0"}
 authors = [
     { name = "Ivan Danylenko", email = "kowd.pauuh@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+    "numpy"
+]
 keywords = ["machine learning", "outlier detection"]
 classifiers = [
     "Development Status :: 1 - Planning",
