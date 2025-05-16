@@ -12,7 +12,7 @@ venv:
 build:
 	@ mkdir -p dbsod/build
 	@ g++ -O3 -Wall -shared -std=c++11 \
-	      -fPIC dbsod_cpp/dbsod.cpp \
+	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude \
 		  -o dbsod/build/dbsod.so
 
