@@ -1,8 +1,8 @@
 #ifndef DISTANCES_H
 #define DISTANCES_H
 
-extern "C" {
-    void distance();
-}
+#include <Eigen/Dense>
+
+double euclidean(const Eigen::VectorXd& a, const Eigen::VectorXd& b);
 
 #endif // DISTANCES_H
