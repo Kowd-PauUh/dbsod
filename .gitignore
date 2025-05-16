@@ -1,2 +1,6 @@
+# c++
 build/
-bin/
+
+# python
+*.egg-info/
+*__pycache__/
