@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "dbsod.h"
-#include "distance.h"
+#include "distances.h"
 
 void dbsod()
 {
