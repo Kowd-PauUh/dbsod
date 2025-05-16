@@ -4,7 +4,7 @@
 #include <string>
 
 extern "C" {
-    void dbsod(double* data, int rows, int cols, std::string metric);
+    void dbsod(double* data, int rows, int cols, const char* metric);
 }
 
 #endif // DBSOD_H
