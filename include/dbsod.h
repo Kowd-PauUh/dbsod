@@ -1,7 +1,7 @@
 #ifndef DBSOD_H
 #define DBSOD_H
 
-namespace dbsod {
+extern "C" {
     void dbsod();
 }
 
