@@ -7,7 +7,8 @@ import numpy as np
 
 dbsod_cpp_path = resources.files('dbsod.build').joinpath('dbsod.so')
 dbsod_cpp = ctypes.CDLL(dbsod_cpp_path)
-dbsod_cpp.dbsod.restype = None
+dbsod_cpp.dbsod.restype = ctypes.POINTER(ctypes.c_float)
+dbsod_cpp.free_array.restype = None
 
 
 def dbsod(
@@ -27,7 +28,8 @@ def dbsod(
     metric_ptr = ctypes.c_char_p(metric.encode('utf-8'))
     eps_space_ptr = eps_space.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
-    return dbsod_cpp.dbsod(
+    # compute outlierness factors using dbsod
+    result_ptr = dbsod_cpp.dbsod(
         X_ptr,
         rows,
         cols,
@@ -36,3 +38,7 @@ def dbsod(
         num_eps_values,
         min_pts,
     )
+    result = np.ctypeslib.as_array(result_ptr, shape=(rows,)).copy()
+    dbsod_cpp.free_array(result_ptr)
+
+    return result
