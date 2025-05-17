@@ -32,6 +32,7 @@ void dbsod(
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X(dataPtr, rows, cols);
     std::string metric(metricPtr);
     std::vector<float> epsSpace(epsSpacePtr, epsSpacePtr + numEpsValues);
+    if (epsSpace.empty()) {throw std::invalid_argument("Empty epsSpace.");}
 
     // get distance function based on metricPtr argument
     std::function<double(const Eigen::VectorXd& a, const Eigen::VectorXd& b)> distanceFn;
