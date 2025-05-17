@@ -16,7 +16,8 @@ void dbsod(
     int cols,
     const char* metricPtr,
     float* epsSpacePtr,
-    int numEpsValues
+    int numEpsValues,
+    int minPts
 ) {
     // validate input
     if (!dataPtr) {
@@ -54,4 +55,5 @@ void dbsod(
     std::cout << "Hello from DBSOD!\n";
     std::cout << X << std::endl;
     std::cout << "maxEps=" << maxEps << std::endl;
+    std::cout << "minPts=" << minPts << std::endl;
 }
