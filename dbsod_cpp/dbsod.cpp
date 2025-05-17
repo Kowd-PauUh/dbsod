@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <algorithm>
 
 #include <Eigen/Dense>
 
@@ -45,6 +46,12 @@ void dbsod(
         );
     }
 
+    // get neighbors within maxEps radius 
+    float maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
+    std::vector<std::vector<std::pair<int, float>>> neighbors = brute(X, distanceFn, maxEps);
+
+    // debug
     std::cout << "Hello from DBSOD!\n";
     std::cout << X << std::endl;
+    std::cout << "maxEps=" << maxEps << std::endl;
 }
