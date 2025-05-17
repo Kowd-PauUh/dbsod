@@ -10,7 +10,8 @@ extern "C" {
         int cols,
         const char* metric,
         float* epsSpacePtr,
-        int numEpsValues
+        int numEpsValues,
+        int minPts
     );
 }
 
