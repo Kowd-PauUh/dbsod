@@ -4,7 +4,7 @@
 #include <string>
 
 extern "C" {
-    void dbsod(
+    float* dbsod(
         double* data,
         int rows,
         int cols,
@@ -13,6 +13,7 @@ extern "C" {
         int numEpsValues,
         int minPts
     );
+    void free_array(float* arrayPtr);
 }
 
 #endif // DBSOD_H
