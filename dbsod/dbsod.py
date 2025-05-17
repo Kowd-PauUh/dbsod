@@ -13,6 +13,7 @@ dbsod_cpp.dbsod.restype = None
 def dbsod(
     X: np.ndarray,
     eps_space: list[float] | np.ndarray,
+    min_pts: int,
     metric: Literal['euclidean', 'manhattan', 'cosine'] = 'cosine',
 ):
     # cast arrays to appropriate data type and obtain shapes
@@ -32,5 +33,6 @@ def dbsod(
         cols,
         metric_ptr,
         eps_space_ptr,
-        num_eps_values
+        num_eps_values,
+        min_pts,
     )
