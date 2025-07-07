@@ -46,7 +46,7 @@ def dbsod(
     # validate `eps_space`
     if not isinstance(eps_space, (list, np.ndarray)):
         raise TypeError(f'Argument `eps_space` must be of type `list` or `np.ndarray`.')
-    if eps_space == []:
+    if list(eps_space) == []:
         raise ValueError(f'Argument `eps_space` must be non-empty list.')
     if not all(isinstance(e, (float, int)) for e in eps_space):
         raise TypeError(f'All elements in `eps_space` must be float or int.')
