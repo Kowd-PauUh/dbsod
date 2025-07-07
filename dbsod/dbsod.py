@@ -17,27 +17,33 @@ def dbsod(
     min_pts: int,
     metric: Literal['euclidean', 'manhattan', 'cosine'] = 'cosine',
 ):
-    # validate input
+    # validate `X`
     if not isinstance(X, np.ndarray):
-        raise TypeError(f'`X` must be of type `np.ndarray`.')
+        raise TypeError(f'Argument `X` must be of type `np.ndarray`.')
     if X.ndim != 2:
-        raise ValueError(f'`X` must be a 2-dimensional array.')
+        raise ValueError(f'Argument `X` must be a 2-dimensional array.')
     if not np.issubdtype(X.dtype, np.number):
-        raise TypeError(f'`X` must contain numeric data.')
+        raise TypeError(f'Argument `X` must contain numeric data.')
     if np.isnan(X).any() or np.isinf(X).any():
-        raise ValueError(f'`X` must not contain NaN or infinite values.')
+        raise ValueError(f'Argument `X` must not contain NaN or infinite values.')
+
+    # validate `eps_space`
     if not isinstance(eps_space, (list, np.ndarray)):
-        raise TypeError(f'`eps_space` must be of type `list` or `np.ndarray`.')
+        raise TypeError(f'Argument `eps_space` must be of type `list` or `np.ndarray`.')
     if eps_space == []:
-        raise ValueError(f'`eps_space` must be non-empty list.')
+        raise ValueError(f'Argument `eps_space` must be non-empty list.')
     if not all(isinstance(e, (float, int)) for e in eps_space):
         raise TypeError(f'All elements in `eps_space` must be float or int.')
+
+    # validate `min_pts`
     if not isinstance(min_pts, int):
-        raise TypeError(f'`min_pts` must be of type `int`.')
+        raise TypeError(f'Argument `min_pts` must be of type `int`.')
     if min_pts <= 0:
-        raise ValueError(f'`min_pts` must be greater than zero.')
+        raise ValueError(f'Argument `min_pts` must be greater than zero.')
     if min_pts > X.shape[0]:
-        raise ValueError(f'`min_pts` cannot be greater than the number of samples in `X`.')
+        raise ValueError(f'Argument `min_pts` cannot be greater than the number of samples in `X`.')
+
+    # validate `metric`
     if metric not in ['euclidean', 'manhattan', 'cosine']:
         raise ValueError(f'Allowed values for `metric` are: ["euclidean", "manhattan", "cosine"].')
 
@@ -52,7 +58,7 @@ def dbsod(
     metric_ptr = ctypes.c_char_p(metric.encode('utf-8'))
     eps_space_ptr = eps_space.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
-    # compute outlierness factors using dbsod
+    # compute outlierness scores using dbsod
     result_ptr = dbsod_cpp.dbsod(
         X_ptr,
         rows,
