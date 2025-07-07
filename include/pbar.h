@@ -2,6 +2,7 @@
 #define PBAR_H
 
 #include "pbar.h"
+#include <string>
 
 void pbar(
     int current,
