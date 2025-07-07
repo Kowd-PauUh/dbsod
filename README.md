@@ -21,3 +21,44 @@ make install_eigen
 make venv
 make build
 ```
+
+## Usage
+
+Take as an example this dataset:
+
+```python
+import numpy as np
+
+DATA = np.array([
+    [0.35, 0.18],
+    [0.60, 0.16],
+    [0.40, 0.18],
+    [0.40, 0.30],
+    [0.30, 0.70],
+])
+```
+
+We can use `dbsod` to calculate outlierness score for each point:
+
+```python
+from dbsod import dbsod
+
+EPS_SPACE = [0.15, 0.22]  # `eps` parameters used for calculating normalized outlierness score
+MIN_PTS = 2               # minimum number of neighbors for the data point to become "core" point
+
+# compute outlierness scores
+outlierness_scores = dbsod(
+    X=DATA,
+    eps_space=EPS_SPACE,
+    min_pts=MIN_PTS,
+    metric='euclidean'
+)
+
+print(outlierness_scores)
+```
+
+The output will be: `array([0. , 0.5, 0. , 0. , 1. ])`.
+
+Below is the visualization of this example:
+
+![Example visualization](examples/example.png "Example visualization")
