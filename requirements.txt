@@ -1,5 +1,8 @@
 numpy
 
+# tests
+pytest
+
 # examples
 jupyter
 seaborn
