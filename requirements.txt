@@ -1,1 +1,5 @@
 numpy
+
+# examples
+jupyter
+seaborn
