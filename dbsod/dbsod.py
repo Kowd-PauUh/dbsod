@@ -42,3 +42,6 @@ def dbsod(
     dbsod_cpp.free_array(result_ptr)
 
     return result
+
+
+__all__ = ['dbsod']
