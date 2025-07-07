@@ -6,7 +6,7 @@
 void pbar(
     int current,
     int total,
-    int width = 50,
+    int width = 20,
     const std::string& desc = ""
 ) {
     static auto last_update = std::chrono::steady_clock::now();
@@ -34,10 +34,13 @@ void pbar(
             else std::cout << " ";
         }
         std::cout << "] " << int(progress * 100.0) << "% ";
-        std::cout << "(" << speed << " it/s)\r";
+        std::cout << "(" << speed << " it/s)           \r";
         std::cout.flush();
 
         last_update = now;
         last_count = current;
+    }
+    if (current == total) {
+        std::cout << std::endl;
     }
 }
