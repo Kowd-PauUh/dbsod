@@ -15,7 +15,7 @@ authors = [
 dependencies = [
     "numpy"
 ]
-keywords = ["machine learning", "outlier detection"]
+keywords = ["machine learning", "outlier detection", "anomaly detection"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
