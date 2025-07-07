@@ -5,6 +5,7 @@ build/
 .venv/
 *.egg-info/
 *__pycache__/
+*.pytest_cache/
 
 # jupyter
 **.ipynb_checkpoints**
