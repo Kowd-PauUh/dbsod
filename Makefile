@@ -25,3 +25,7 @@ build:
 # launch jupyterlab for examples
 notebook:
 	@ bash -c "source .venv/bin/activate && jupyter lab --ip=0.0.0.0 --port 8502 --NotebookApp.token=''"
+
+# run tests
+test:
+	@ bash -c "source .venv/bin/activate && pytest tests/ -v"
