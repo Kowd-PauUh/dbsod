@@ -33,6 +33,31 @@ def dbsod(
     min_pts: int,
     metric: Literal['euclidean', 'manhattan', 'cosine'] = 'cosine',
 ):
+    """
+    Calculates normalized outlierness scores using DBSOD algorithm,
+    which performs density-based outlier detection across multiple
+    neighborhood radii (`eps_space`).
+    
+    Parameters
+    ----------
+    X : np.ndarray
+        2D data of shape (num_points, num_dims).
+    eps_space : list[float | int] | np.ndarray
+        List of `epsilon` values for which outliers are identified.
+    min_pts : int
+        Minimum number of points within `epsilon` radius required to
+        consider particular point a "core" point.
+    metric : Literal['euclidean', 'manhattan', 'cosine'], optional
+        Metric used to calculate distance between distinct points.
+        Default is "cosine".
+
+    Returns
+    -------
+    np.ndarray
+        1D array of normalized outlierness scores, where higher scores
+        correspond to the points which are more likely to be outliers.
+        Each score is within [0; 1] range.
+    """
     # validate `X`
     if not isinstance(X, np.ndarray):
         raise TypeError(f'Argument `X` must be of type `np.ndarray`.')
