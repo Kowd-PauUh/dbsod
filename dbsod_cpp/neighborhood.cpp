@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <Eigen/Dense>
+#include "pbar.h"
 
 std::vector<std::vector<std::pair<int, float>>> brute(
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X,
@@ -13,6 +14,8 @@ std::vector<std::vector<std::pair<int, float>>> brute(
 
     // iterate over full dataset computing pairwise distances between points
     for (int i = 0; i < N; ++i) {
+        pbar(/*current=*/i, /*total=*/N-1, /*width=*/20, /*desc=*/"Computing pairwise distances:                 ");
+
         Eigen::VectorXd xi = X.row(i);
 
         for (int j = i + 1; j < N; ++j) {

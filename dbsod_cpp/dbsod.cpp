@@ -10,6 +10,7 @@
 #include "distances.h"
 #include "neighborhood.h"
 #include "outliers.h"
+#include "pbar.h"
 
 double* dbsod(
     double* dataPtr,
@@ -54,7 +55,10 @@ double* dbsod(
 
     // compute outlierness scores
     Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);
-    for (float eps : epsSpace) {
+    for (int i = 0; i < numEpsValues; i++) {
+        pbar(/*current=*/i, /*total=*/numEpsValues-1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
+
+        float eps = epsSpace[i];
         Eigen::VectorXi result = outliers(neighbors, minPts, eps);
         scores += result;
     }
