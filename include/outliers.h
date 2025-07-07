@@ -3,8 +3,9 @@
 
 #include "outliers.h"
 #include <vector>
+#include <Eigen/Dense>
 
-std::vector<int> outliers(
+Eigen::VectorXi outliers(
     std::vector<std::vector<std::pair<int, float>>>& neighbors,
     int minPts,
     float eps
