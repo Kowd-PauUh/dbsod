@@ -2,6 +2,14 @@
 
 Official implementation of "DBSOD: Density-Based Spatial Outlier Detection". Paper preprint is coming soon.
 
+## Algorithm
+
+While DBSCAN is a widely used clustering algorithm, it only provides a binary label for outliers and does not assign a continuous outlierness score. To address this limitation, we propose DBSOD, a density-based spatial outlier detection method inspired by DBSCAN. The algorithm estimates the consistency with which a data point is identified as an outlier across a range of neighborhood sizes:
+
+![DBSOD Algorithm](examples/figures/algorithm.png "DBSOD Algorithm")
+
+The algorithm systematically varies the neighborhood size parameter $\epsilon$, evaluating outlierness across multiple density assumptions. By aggregating binary outlier classifications across these scales, it produces a normalized outlierness score for each point, reflecting how consistently the point is identified as an outlier.
+
 ## Installation
 
 _Note: the package was developed for Linux machines._
