@@ -9,8 +9,9 @@
 
 #include "distances.h"
 #include "neighborhood.h"
+#include "outliers.h"
 
-float* dbsod(
+double* dbsod(
     double* dataPtr,
     int rows,
     int cols,
@@ -52,21 +53,22 @@ float* dbsod(
     std::vector<std::vector<std::pair<int, float>>> neighbors = brute(X, distanceFn, maxEps);
 
     // compute outlierness scores
-    std::vector<float> scores(rows, 0.0f);
+    Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);
+    for (float eps : epsSpace) {
+        Eigen::VectorXi result = outliers(neighbors, minPts, eps);
+        scores += result;
+    }
+
+    // normalize outlierness scores
+    Eigen::VectorXd normalizedScores = scores.cast<double>() / epsSpace.size();
 
     // allocate memory to return
-    float* result = new float[rows];
-    std::copy(scores.begin(), scores.end(), result);
-
-    // debug
-    std::cout << "Hello from DBSOD!\n";
-    std::cout << X << std::endl;
-    std::cout << "maxEps=" << maxEps << std::endl;
-    std::cout << "minPts=" << minPts << std::endl;
+    double* result = new double[rows];
+    std::copy(normalizedScores.begin(), normalizedScores.end(), result);
 
     return result;
 }
 
-void free_array(float* arrayPtr) {
+void free_array(double* arrayPtr) {
     delete[] arrayPtr;
 }
