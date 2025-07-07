@@ -6,7 +6,7 @@ from dbsod import dbsod
 
 def test_invalid_X_type():
     with pytest.raises(TypeError, match='Argument `X` must be of type `np.ndarray`.'):
-        dbsod("not an array", [0.5], 5)
+        dbsod('not an array', [0.5], 5)
 
 
 def test_invalid_X_ndim():
@@ -16,7 +16,7 @@ def test_invalid_X_ndim():
 
 def test_invalid_X_dtype():
     with pytest.raises(TypeError, match='Argument `X` must contain numeric data.'):
-        dbsod(np.array([["a", "b"], ["c", "d"]]), [0.5], 5)
+        dbsod(np.array([['a', 'b'], ['c', 'd']]), [0.5], 5)
 
 
 def test_invalid_X_nan_inf():
@@ -27,7 +27,7 @@ def test_invalid_X_nan_inf():
 
 def test_invalid_eps_space_type():
     with pytest.raises(TypeError, match='Argument `eps_space` must be of type `list` or `np.ndarray`.'):
-        dbsod(np.random.rand(5, 2), "not a list", 5)
+        dbsod(np.random.rand(5, 2), 'not a list', 5)
 
 
 def test_empty_eps_space():
@@ -37,12 +37,12 @@ def test_empty_eps_space():
 
 def test_invalid_eps_space_element_type():
     with pytest.raises(TypeError, match='All elements in `eps_space` must be float or int.'):
-        dbsod(np.random.rand(5, 2), [0.5, "invalid"], 5)
+        dbsod(np.random.rand(5, 2), [0.5, 'invalid'], 5)
 
 
 def test_invalid_min_pts_type():
     with pytest.raises(TypeError, match='Argument `min_pts` must be of type `int`.'):
-        dbsod(np.random.rand(5, 2), [0.5], "5")
+        dbsod(np.random.rand(5, 2), [0.5], '5')
 
 
 def test_invalid_min_pts_value():
