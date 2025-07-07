@@ -61,4 +61,8 @@ The output will be: `array([0. , 0.5, 0. , 0. , 1. ])`.
 
 Below is the visualization of this example:
 
-![Example visualization](examples/example.png "Example visualization")
+![Simple Example](examples/figures/00-readme-example.png "Simple Example")
+
+On the real-world data (check out `examples/01. Real Data.ipynb`) result of `DBSOD` would look like:
+
+![Real-World Example](examples/figures/01-real-data.png "Real-World Example")
