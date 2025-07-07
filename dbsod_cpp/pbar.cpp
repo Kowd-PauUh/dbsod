@@ -58,5 +58,8 @@ void pbar(
     }
     if (current == total) {
         std::cout << std::endl;
+        last_update = std::chrono::steady_clock::now();
+        last_count = 0;
+        speed = 0.0;
     }
 }
