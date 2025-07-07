@@ -21,3 +21,7 @@ build:
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude -I/usr/include/eigen3 \
 		  -o dbsod/build/dbsod.so
+
+# launch jupyterlab for examples
+notebook:
+	@ bash -c "source .venv/bin/activate && jupyter lab --ip=0.0.0.0 --port 8502 --NotebookApp.token=''"
