@@ -70,7 +70,7 @@ def dbsod(
     num_eps_values = len(eps_space)
 
     # pointers for unsupported data types
-    X_ptr = X.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+    X_ptr = X.ravel(order='C').ctypes.data_as(ctypes.POINTER(ctypes.c_double))
     metric_ptr = ctypes.c_char_p(metric.encode('utf-8'))
     eps_space_ptr = eps_space.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
 
