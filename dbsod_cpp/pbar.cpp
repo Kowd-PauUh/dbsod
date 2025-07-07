@@ -6,7 +6,8 @@
 void pbar(
     int current,
     int total,
-    int width = 50
+    int width = 50,
+    const std::string& desc = ""
 ) {
     static auto last_update = std::chrono::steady_clock::now();
     auto now = std::chrono::steady_clock::now();
@@ -17,7 +18,7 @@ void pbar(
         float progress = static_cast<float>(current) / total;
         int pos = width * progress;
 
-        std::cout << "[";
+        std::cout << desc << " [";
         for (int i = 0; i < width; ++i) {
             if (i < pos) std::cout << "=";
             else if (i == pos) std::cout << ">";

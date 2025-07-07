@@ -6,7 +6,8 @@
 void pbar(
     int current,
     int total,
-    int width
+    int width,
+    const std::string& desc
 );
 
 #endif // PBAR_H
