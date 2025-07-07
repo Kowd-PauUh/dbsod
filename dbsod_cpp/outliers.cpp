@@ -1,13 +1,14 @@
 #include "outliers.h"
 #include <vector>
+#include <Eigen/Dense>
 
-std::vector<int> outliers(
+Eigen::VectorXi outliers(
     std::vector<std::vector<std::pair<int, float>>>& neighbors,
     int minPts,
     float eps
 ) {
     const int N = neighbors.size();
-    std::vector<int> labels(N, 1);  // 1 means outlier/noise
+    Eigen::VectorXi labels = Eigen::VectorXi::Constant(N, 1);  // 1 means outlier/noise
     std::vector<bool> core(N, false);
 
     // find core points
