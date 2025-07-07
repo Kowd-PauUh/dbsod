@@ -63,6 +63,6 @@ Below is the visualization of this example:
 
 ![Simple Example](examples/figures/00-readme-example.png "Simple Example")
 
-On the real-world data (check out `examples/01. Real Data.ipynb`) result of `DBSOD` would look like:
+On the real-world data (check out [this example](examples/01.%20Real%20Data.ipynb)) result of `DBSOD` would look like:
 
 ![Real-World Example](examples/figures/01-real-data.png "Real-World Example")
