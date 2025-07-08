@@ -21,7 +21,7 @@ from typing import Literal
 import numpy as np
 
 
-dbsod_cpp_path = resources.files('dbsod').joinpath('dbsod.so')
+dbsod_cpp_path = resources.files('dbsod').joinpath('dbsod.cpp.so')
 dbsod_cpp = ctypes.CDLL(dbsod_cpp_path)
 dbsod_cpp.dbsod.restype = ctypes.POINTER(ctypes.c_double)
 dbsod_cpp.free_array.restype = None
