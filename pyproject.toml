@@ -40,3 +40,6 @@ Repository = "https://github.com/Kowd-PauUh/dbsod"
 
 [tool.setuptools]
 packages = ["dbsod"]
+
+[tool.setuptools.package-data]
+dbsod = ["*.so"]
