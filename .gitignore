@@ -1,5 +1,5 @@
 # c++
-build/
+*.so
 
 # python
 .venv/
@@ -9,3 +9,6 @@ build/
 
 # jupyter
 **.ipynb_checkpoints**
+
+# trash
+*.nfs*
