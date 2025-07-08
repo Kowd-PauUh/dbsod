@@ -20,7 +20,7 @@ build:
 	@ g++ -O3 -Wall -shared -std=c++11 \
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude -I/usr/include/eigen3 \
-		  -o dbsod/build/dbsod.so
+		  -o dbsod/dbsod.so
 
 # launch jupyterlab for examples
 notebook:
