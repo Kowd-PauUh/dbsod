@@ -15,7 +15,6 @@ venv:
 
 # build dbsod.so
 build:
-	@ mkdir -p dbsod/build
 	@ dpkg -s libeigen3-dev >/dev/null 2>&1 || ( $(MAKE) --no-print-directory install_eigen )
 	@ g++ -O3 -Wall -shared -std=c++11 \
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
