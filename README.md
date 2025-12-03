@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17806900.svg)](https://doi.org/10.5281/zenodo.17806900)
+
 # DBSOD: Density-Based Spatial Outlier Detection
 
 Official implementation of "DBSOD: Density-Based Spatial Outlier Detection". Paper preprint is coming soon.
@@ -74,3 +76,17 @@ Below is the visualization of this example:
 On the real-world data (check out [this example](examples/01.%20Real%20Data.ipynb)) result of `DBSOD` would look like:
 
 ![Real-World Example](examples/figures/01-real-data.png "Real-World Example")
+
+## Citation
+
+```bibtex
+@software{danylenko2025dbsod, 
+  author = {Danylenko, Ivan},
+  doi = {10.5281/zenodo.17806900},
+  month = jul,
+  title = {{DBSOD: Density-Based Spatial Outlier Detection}},
+  url = {https://github.com/Kowd-PauUh/dbsod},
+  version = {0.0.4},
+  year = {2025}
+}
+```
