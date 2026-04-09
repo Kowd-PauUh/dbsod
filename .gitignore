@@ -10,5 +10,8 @@
 # jupyter
 **.ipynb_checkpoints**
 
+# vscode
+.vscode
+
 # trash
 *.nfs*
