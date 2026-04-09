@@ -14,26 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.4.1
+
+      - uses: actions/upload-artifact@v4
         with:
-          python-version: "3.x"
-
-      - name: Build release distributions
-        run: |
-
-          # build dbsod.so
-          make build
-
-          # build python package
-          python -m pip install --upgrade pip
-          python -m pip install build setuptools
-          python -m build
-
-      - name: Upload distributions
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
+          name: wheels
+          path: ./wheelhouse/*.whl
 
   pypi-publish:
     runs-on: ubuntu-latest
@@ -50,10 +37,10 @@ jobs:
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4
         with:
-          name: release-dists
-          path: dist/
+          name: wheels
+          path: wheelhouse/
 
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: dist/
+          packages-dir: wheelhouse/
