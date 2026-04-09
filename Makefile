@@ -15,15 +15,9 @@ venv:
 	@ uv pip install -r requirements.txt --python .venv
 	@ uv pip install -e . --python .venv
 
-# build dbsod.so
-build:
-	@ dpkg -s libeigen3-dev >/dev/null 2>&1 || ( $(MAKE) --no-print-directory install_eigen )
-	@ echo "Compiling shared object..."
-	@ g++ -O3 -Wall -shared -std=c++23 \
-	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
-		  -Iinclude -I/usr/include/eigen3 \
-		  -o dbsod/dbsod.cpp.so
-	@ echo "Done."
+# reinstall package, effectively rebuilding .so file
+rebuild:
+	@ uv pip install -e . --python .venv
 
 # launch jupyterlab for examples
 notebook:
