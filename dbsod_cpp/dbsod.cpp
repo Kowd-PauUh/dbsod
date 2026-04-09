@@ -16,7 +16,11 @@
 
 #include "dbsod.h"
 
-#include <iostream>
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+
+#include <vector>
 #include <string>
 #include <functional>
 #include <algorithm>
@@ -28,40 +32,37 @@
 #include "outliers.h"
 #include "pbar.h"
 
-double* dbsod(
-    double* dataPtr,
-    int rows,
-    int cols,
-    const char* metricPtr,
-    float* epsSpacePtr,
-    int numEpsValues,
+namespace py = pybind11;
+
+py::array_t<double> dbsod(
+    py::array_t<double, py::array::c_style> data,
+    std::string metric,
+    std::vector<float> epsSpace,
     int minPts
 ) {
     // validate input
-    if (!dataPtr) {
-        throw std::invalid_argument("Input data pointer is null.");
+    if (data.size() == 0) {
+        throw std::invalid_argument("`data` is empty.");
     }
-    if (!metricPtr) {
-        throw std::invalid_argument("Input metric pointer is null.");
-    }
-    if (!epsSpacePtr) {
-        throw std::invalid_argument("Input epsSpace pointer is null.");
+    if (epsSpace.empty()) {
+        throw std::invalid_argument("`epsSpace` is empty.");
     }
 
-    // form appropriate data structures from given pointers 
+    // map data to Eigen
+    auto buf = data.request();
+    int rows = buf.shape[0];
+    int cols = buf.shape[1];
+    double* dataPtr = static_cast<double*>(buf.ptr);
     Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X(dataPtr, rows, cols);
-    std::string metric(metricPtr);
-    std::vector<float> epsSpace(epsSpacePtr, epsSpacePtr + numEpsValues);
-    if (epsSpace.empty()) {throw std::invalid_argument("Empty epsSpace.");}
 
     // get distance function based on metricPtr argument
-    std::function<double(const Eigen::VectorXd& a, const Eigen::VectorXd& b)> distanceFn;
+    std::function<double(const Eigen::VectorXd&, const Eigen::VectorXd&)> distanceFn;
     auto it = distanceFns.find(metric);
     if (it != distanceFns.end()) {
         distanceFn = it->second;
     } else {
         throw std::runtime_error(
-            "\"metricPtr\" argument must point to one of [\"euclidean\", \"manhattan\", \"cosine\"]."
+            "`metric` must be one of [\"euclidean\", \"manhattan\", \"cosine\"]."
         );
     }
 
@@ -71,9 +72,8 @@ double* dbsod(
 
     // compute outlierness scores
     Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);
-    for (int i = 0; i < numEpsValues; i++) {
-        pbar(/*current=*/i, /*total=*/numEpsValues-1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
-
+    for (size_t i = 0; i < epsSpace.size(); i++) {
+        pbar(/*current=*/i, /*total=*/epsSpace.size()-1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
         float eps = epsSpace[i];
         Eigen::VectorXi result = outliers(neighbors, minPts, eps);
         scores += result;
@@ -82,13 +82,6 @@ double* dbsod(
     // normalize outlierness scores
     Eigen::VectorXd normalizedScores = scores.cast<double>() / epsSpace.size();
 
-    // allocate memory to return
-    double* result = new double[rows];
-    std::copy(normalizedScores.begin(), normalizedScores.end(), result);
-
-    return result;
-}
-
-void free_array(double* arrayPtr) {
-    delete[] arrayPtr;
+    // return as NumPy array
+    return py::array_t<double>(normalizedScores.size(), normalizedScores.data());
 }

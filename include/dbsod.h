@@ -17,19 +17,17 @@
 #ifndef DBSOD_H
 #define DBSOD_H
 
-#include <string>
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 
-extern "C" {
-    double* dbsod(
-        double* data,
-        int rows,
-        int cols,
-        const char* metric,
-        float* epsSpacePtr,
-        int numEpsValues,
-        int minPts
-    );
-    void free_array(double* arrayPtr);
-}
+namespace py = pybind11;
+
+py::array_t<double> dbsod(
+    py::array_t<double, py::array::c_style> data,
+    std::string metric,
+    std::vector<float> epsSpace,
+    int minPts
+);
 
 #endif // DBSOD_H
