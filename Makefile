@@ -22,7 +22,8 @@ build:
 	@ g++ -O3 -Wall -shared -std=c++23 \
 	      -fPIC $(wildcard dbsod_cpp/*.cpp) \
 		  -Iinclude -I/usr/include/eigen3 \
-		  -o dbsod/dbsod.cpp.so
+		  $(shell python3 -m pybind11 --includes) \
+		  -o dbsod/dbsod_py.so
 	@ echo "Done."
 
 # launch jupyterlab for examples
