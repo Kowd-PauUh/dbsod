@@ -28,5 +28,5 @@ PYBIND11_MODULE(dbsod_py, m) {
           py::arg("metric"),
           py::arg("epsSpace"),
           py::arg("minPts"),
-          "Compute outlierness scores using DBSOD algorithm.");
+          "Calculates normalized outlierness scores using DBSOD algorithm.");
 }
