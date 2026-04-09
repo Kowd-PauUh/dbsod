@@ -10,9 +10,10 @@ install_eigen:
 	@ sudo apt-get install libeigen3-dev -y
 
 # create .venv, install dependencies and dbsod in dev mode
-venv: 
-	@ python3 -m venv .venv
-	@ bash -c "source .venv/bin/activate && pip install -r requirements.txt && pip install -e ."
+venv:
+	@ uv venv
+	@ uv pip install -r requirements.txt --python .venv
+	@ uv pip install -e . --python .venv
 
 # build dbsod.so
 build:
