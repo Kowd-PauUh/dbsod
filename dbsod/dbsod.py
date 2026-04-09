@@ -14,17 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import ctypes
-from importlib import resources
 from typing import Literal
 
 import numpy as np
 
-
-dbsod_cpp_path = resources.files('dbsod').joinpath('dbsod.cpp.so')
-dbsod_cpp = ctypes.CDLL(dbsod_cpp_path)
-dbsod_cpp.dbsod.restype = ctypes.POINTER(ctypes.c_double)
-dbsod_cpp.free_array.restype = None
+import dbsod.dbsod_py as dbsod_py
 
 
 def dbsod(
@@ -88,31 +82,11 @@ def dbsod(
     if metric not in ['euclidean', 'manhattan', 'cosine']:
         raise ValueError(f'Allowed values for `metric` are: ["euclidean", "manhattan", "cosine"].')
 
-    # cast arrays to appropriate data type and obtain shapes
-    X = X.astype(np.float64)
-    rows, cols = X.shape
+    # cast arrays to appropriate data types
+    X = X.astype(np.float64, copy=False)
     eps_space = np.array(eps_space).astype(np.float32)
-    num_eps_values = len(eps_space)
 
-    # pointers for unsupported data types
-    X_ptr = X.ravel(order='C').ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-    metric_ptr = ctypes.c_char_p(metric.encode('utf-8'))
-    eps_space_ptr = eps_space.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
-
-    # compute outlierness scores using dbsod
-    result_ptr = dbsod_cpp.dbsod(
-        X_ptr,
-        rows,
-        cols,
-        metric_ptr,
-        eps_space_ptr,
-        num_eps_values,
-        min_pts,
-    )
-    result = np.ctypeslib.as_array(result_ptr, shape=(rows,)).copy()
-    dbsod_cpp.free_array(result_ptr)
-
-    return result
+    return dbsod_py.dbsod(X, metric, eps_space, min_pts)
 
 
 __all__ = ['dbsod']
