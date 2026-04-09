@@ -14,7 +14,7 @@ The algorithm systematically varies the neighborhood size parameter $\epsilon$, 
 
 ## Installation
 
-_Note: the package was developed for Linux machines._
+_Note: the package was developed for Linux (manylinux, x86_64) machines._
 
 You can install package using `pip`:
 
@@ -29,7 +29,6 @@ cd dbsod
 make install_g++
 make install_eigen
 make venv
-make build
 ```
 
 ## Usage
