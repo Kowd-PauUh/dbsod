@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools", "pybind11"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -35,11 +35,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Kowd-PauUh"
+Homepage = "https://github.com/Kowd-PauUh/dbsod"
 Repository = "https://github.com/Kowd-PauUh/dbsod"
 
 [tool.setuptools]
 packages = ["dbsod"]
-
-[tool.setuptools.package-data]
-dbsod = ["*.so"]
