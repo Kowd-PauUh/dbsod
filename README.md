@@ -86,7 +86,7 @@ On the real-world data (check out [this example](examples/01.%20Real%20Data.ipyn
   month = jul,
   title = {{DBSOD: Density-Based Spatial Outlier Detection}},
   url = {https://github.com/Kowd-PauUh/dbsod},
-  version = {0.0.4},
+  version = {0.0.5},
   year = {2025}
 }
 ```
