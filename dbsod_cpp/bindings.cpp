@@ -20,7 +20,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(dbsod_py, m) {
+PYBIND11_MODULE(dbsod_cpp, m) {
     m.doc() = "DBSOD (Density-Based Spatial Outlier Detection) Python binding";
 
     m.def("dbsod", &dbsod,

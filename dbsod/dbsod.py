@@ -18,7 +18,7 @@ from typing import Literal
 
 import numpy as np
 
-import dbsod.dbsod_py as dbsod_py
+from dbsod import dbsod_cpp
 
 
 def dbsod(
@@ -86,7 +86,7 @@ def dbsod(
     X = X.astype(np.float64, copy=False)
     eps_space = np.array(eps_space).astype(np.float32)
 
-    return dbsod_py.dbsod(X, metric, eps_space, min_pts)
+    return dbsod_cpp.dbsod(X, metric, eps_space, min_pts)
 
 
 __all__ = ['dbsod']
