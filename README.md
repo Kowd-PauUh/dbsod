@@ -82,10 +82,10 @@ On the real-world data (check out [this example](examples/01.%20Real%20Data.ipyn
 @software{danylenko2025dbsod, 
   author = {Danylenko, Ivan},
   doi = {10.5281/zenodo.17806900},
-  month = jul,
+  month = apr,
   title = {{DBSOD: Density-Based Spatial Outlier Detection}},
   url = {https://github.com/Kowd-PauUh/dbsod},
   version = {0.0.5},
-  year = {2025}
+  year = {2026}
 }
 ```
