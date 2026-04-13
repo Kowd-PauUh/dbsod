@@ -49,7 +49,7 @@ KDTree::KDTree(const std::span<const double> &data_, size_t rows_, size_t cols_)
     root = dfs(dfs, 0, rows, 0);
 }
 
-std::vector<Neighbor> KDTree::query_radius(const std::vector<double> &query, double r) const {
+std::vector<Neighbor> KDTree::query_radius(const std::span<const double> &query, double r) const {
     // validate query dimensionality
     if (query.size() != cols) {
         throw std::invalid_argument("Query dimensionality mismatch");

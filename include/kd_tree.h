@@ -44,7 +44,7 @@ class KDTree {
 
   public:
     KDTree(const std::span<const double> &data_, size_t rows_, size_t cols_);
-    std::vector<Neighbor> query_radius(const std::vector<double> &query, double r) const;
+    std::vector<Neighbor> query_radius(const std::span<const double> &query, double r) const;
 };
     
 }  // namespace kd_tree
