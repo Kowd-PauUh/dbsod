@@ -25,7 +25,6 @@ def dbsod(
     X: np.ndarray,
     eps_space: list[float | int] | np.ndarray,
     min_pts: int,
-    metric: Literal['euclidean', 'manhattan', 'cosine'] = 'cosine',
 ):
     """
     Calculates normalized outlierness scores using DBSOD algorithm,
@@ -41,9 +40,6 @@ def dbsod(
     min_pts : int
         Minimum number of points within `epsilon` radius required to
         consider particular point a "core" point.
-    metric : Literal['euclidean', 'manhattan', 'cosine'], optional
-        Metric used to calculate distance between distinct points.
-        Default is "cosine".
 
     Returns
     -------
@@ -78,15 +74,11 @@ def dbsod(
     if min_pts > X.shape[0]:
         raise ValueError(f'Argument `min_pts` cannot be greater than the number of samples in `X`.')
 
-    # validate `metric`
-    if metric not in ['euclidean', 'manhattan', 'cosine']:
-        raise ValueError(f'Allowed values for `metric` are: ["euclidean", "manhattan", "cosine"].')
-
     # cast arrays to appropriate data types
     X = X.astype(np.float64, copy=False)
     eps_space = np.array(eps_space).astype(np.float32)
 
-    return dbsod_cpp.dbsod(X, metric, eps_space, min_pts)
+    return dbsod_cpp.dbsod(X, eps_space, min_pts)
 
 
 __all__ = ['dbsod']
