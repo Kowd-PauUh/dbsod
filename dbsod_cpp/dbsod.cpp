@@ -28,7 +28,7 @@
 #include "kd_tree.h"
 #include "pbar.h"
 
-constexpr double DBL_MAX = std::numeric_limits<double>::max();
+constexpr double INF = std::numeric_limits<double>::max();
 
 namespace py = pybind11;
 
@@ -37,7 +37,7 @@ std::vector<double> get_core_threshold(
     size_t min_pts
 ) {
     size_t n = neighbors.size();
-    std::vector<double> core_threshold(n, DBL_MAX);
+    std::vector<double> core_threshold(n, INF);
     
     // core threshold is squared distance from a point to its min_pts-th neighbor
     // (0-indexed, because point is its own neighbor)
