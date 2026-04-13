@@ -23,16 +23,46 @@
 #include <vector>
 #include <functional>
 #include <algorithm>
-
-#include <Eigen/Dense>
+#include <limits>
 
 #include "kd_tree.h"
-#include "outliers.h"
 #include "pbar.h"
+
+constexpr double DBL_MAX = std::numeric_limits<double>::max();
 
 namespace py = pybind11;
 
-py::array_t<double> dbsod(
+std::vector<double> get_core_threshold(
+    const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
+    size_t min_pts
+) {
+    size_t n = neighbors.size();
+    std::vector<double> core_threshold(n, DBL_MAX);
+    
+    // core threshold is squared distance from a point to its min_pts-th neighbor
+    // (0-indexed, because point is its own neighbor)
+    for (size_t i = 0; i < n; ++i) {
+        if (neighbors[i].size() > min_pts) {
+            core_threshold[i] = neighbors[i][min_pts].dist2;
+        }
+    }
+
+    return core_threshold;
+}
+
+
+std::vector<double> get_outlierness_score(
+    const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
+    std::vector<double> &eps_space
+) {
+    // TODO
+    // for (size_t i = 0; i < eps_space.size(); i++) {
+    //     pbar(/*current=*/i, /*total=*/eps_space.size() - 1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
+    // }
+}
+
+
+std::vector<double> dbsod(
     py::array_t<double, py::array::c_style> data,
     std::vector<double> epsSpace,
     int minPts
@@ -56,21 +86,22 @@ py::array_t<double> dbsod(
     kd_tree::KDTree tree(span_data, rows, cols);
 
     // get radius neighborhood graph
-    double maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
+    auto maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
     auto neighbors = tree.radius_neighborhood_graph(maxEps);
 
-    // compute outlierness scores
-    Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);
-    for (size_t i = 0; i < epsSpace.size(); i++) {
-        pbar(/*current=*/i, /*total=*/epsSpace.size()-1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
-        float eps = epsSpace[i];
-        Eigen::VectorXi result = outliers(neighbors, minPts, eps);
-        scores += result;
+    // sort each point's neighbors by distance
+    for (auto &n : neighbors) {
+        std::sort(
+            n.begin(),
+            n.end(),
+            [](const auto &a, const auto &b) {
+                return a.dist2 < b.dist2;
+            }
+        );
     }
 
-    // normalize outlierness scores
-    Eigen::VectorXd normalizedScores = scores.cast<double>() / epsSpace.size();
+    // compute core threshold for each point
+    auto core_threshold = get_core_threshold(neighbors, minPts);
 
-    // return as NumPy array
-    return py::array_t<double>(normalizedScores.size(), normalizedScores.data());
+    return core_threshold;
 }
