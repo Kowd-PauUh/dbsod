@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <span>
+#include <stack>
 #include <numeric>
 #include <memory>
 #include <algorithm>
@@ -46,6 +47,65 @@ KDTree::KDTree(const std::span<const double> &data_, size_t rows_, size_t cols_)
     };
 
     root = dfs(dfs, 0, rows, 0);
+}
+
+std::vector<Neighbor> KDTree::query_radius(const std::vector<double> &query, double r) const {
+    // validate query dimensionality
+    if (query.size() != cols) {
+        throw std::invalid_argument("Query dimensionality mismatch");
+    }
+
+    auto compute_dist2 = [&](size_t row) -> double {
+        double sum = 0.0;
+        for (size_t i = 0; i < cols; ++i) {
+            double diff = query[i] - get_value(row, i);
+            sum += diff * diff;
+        }
+        return sum;
+    };
+
+    std::vector<Neighbor> result;
+    double r2 = r * r;
+
+    std::stack<const TreeNode*> nodes_to_visit;
+    nodes_to_visit.push(root.get());
+
+    // traverse tree
+    while (!nodes_to_visit.empty()) {
+        const TreeNode *node = nodes_to_visit.top();
+        nodes_to_visit.pop();
+
+        if (!node) continue;
+
+        double dist2 = compute_dist2(node->index);
+        
+        // check current point
+        if (dist2 <= r2) result.emplace_back(node->index, dist2);
+
+        size_t axis = node->axis;
+
+        // define near and far branches
+        double diff = query[axis] - get_value(node->index, axis);
+        
+        TreeNode *near;
+        TreeNode *far;
+
+        if (diff < 0) {
+            near = node->left.get();
+            far = node->right.get();
+        } else {
+            far = node->left.get();
+            near = node->right.get();
+        }
+
+        // always explore near branch
+        nodes_to_visit.push(near);
+
+        // explore far branch if the sphere intersects it
+        if (r2 >= diff * diff) nodes_to_visit.push(far);
+    }
+
+    return result;
 }
 
 }
