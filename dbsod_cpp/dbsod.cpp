@@ -141,6 +141,12 @@ std::vector<double> dbsod(
     // compute outlierness score for each point
     auto result = get_outlierness_score(neighbors, eps_space, core_threshold);
 
+    // normalize outlierness scores
+    auto max_score = *std::max_element(result.begin(), result.end());
+    for (auto &score : result) {
+        score /= max_score;
+    }
+
     return result;
 }
 
