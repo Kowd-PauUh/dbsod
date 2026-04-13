@@ -40,7 +40,8 @@ PYBIND11_MODULE(dbsod_cpp, m) {
             std::span<const double> data(X.data(), rows * cols);
             std::span<const double> eps_space_(eps_space.data(), eps_space.size());
 
-            return dbsod::dbsod(data, rows, cols, eps_space_, min_pts);
+            auto result = dbsod::dbsod(data, rows, cols, eps_space_, min_pts);
+            return py::array_t<double>(result.size(), result.data());
         },
         py::arg("data"),
         py::arg("eps_space"),
