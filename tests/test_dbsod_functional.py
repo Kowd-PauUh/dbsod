@@ -15,8 +15,7 @@ DATA = np.array(
 )
 EPS_SPACE = [0.15, 0.22]
 MIN_PTS = 2
-METRIC = 'euclidean'
-EXPECTED_RESULT = np.array([0.0, 0.5, 0.0, 0.0, 1.0])
+EXPECTED_RESULT = np.array([0.0, 1.0, 0.0, 0.0, 2.0])
 
 
 def test_dbsod_correctness():
