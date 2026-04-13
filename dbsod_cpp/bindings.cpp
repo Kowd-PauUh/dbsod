@@ -29,17 +29,18 @@ PYBIND11_MODULE(dbsod_cpp, m) {
     m.doc() = "DBSOD (Density-Based Spatial Outlier Detection) Python binding";
 
     m.def("dbsod",
-        [](py::array_t<double, py::array::c_style> X,
-           std::vector<double> eps_space,
+        [](py::array_t<double, py::array::c_style | py::array::forcecast> X,
+           py::array_t<double, py::array::c_style | py::array::forcecast> eps_space,
            size_t min_pts)
         {
             size_t rows = static_cast<size_t>(X.shape(0));
             size_t cols = static_cast<size_t>(X.shape(1));
 
-            // read-only data span
+            // read-only spans
             std::span<const double> data(X.data(), rows * cols);
+            std::span<const double> eps_space_(eps_space.data(), eps_space.size());
 
-            return dbsod::dbsod(data, rows, cols, eps_space, min_pts);
+            return dbsod::dbsod(data, rows, cols, eps_space_, min_pts);
         },
         py::arg("data"),
         py::arg("eps_space"),
