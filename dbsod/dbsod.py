@@ -25,7 +25,7 @@ def dbsod(
     X: np.ndarray,
     eps_space: list[float | int] | np.ndarray,
     min_pts: int,
-):
+) -> np.ndarray:
     """
     Calculates normalized outlierness scores using DBSOD algorithm,
     which performs density-based outlier detection across multiple
