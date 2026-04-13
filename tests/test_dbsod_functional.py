@@ -24,6 +24,5 @@ def test_dbsod_correctness():
         X=DATA,
         eps_space=EPS_SPACE,
         min_pts=MIN_PTS,
-        metric=METRIC
     )
     np.testing.assert_allclose(result, EXPECTED_RESULT, atol=1e-6)
