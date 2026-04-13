@@ -17,15 +17,30 @@
 #include "dbsod.h"
 
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(dbsod_cpp, m) {
     m.doc() = "DBSOD (Density-Based Spatial Outlier Detection) Python binding";
 
-    m.def("dbsod", &dbsod,
-          py::arg("data"),
-          py::arg("eps_space"),
-          py::arg("min_pts"),
-          "Calculates normalized outlierness scores using DBSOD algorithm.");
+    m.def("dbsod",
+        [](py::array_t<double, py::array::c_style> X,
+           std::vector<double> eps_space,
+           size_t min_pts)
+        {
+            size_t rows = static_cast<size_t>(X.shape(0));
+            size_t cols = static_cast<size_t>(X.shape(1));
+
+            // read-only data span
+            std::span<const double> data(X.data(), rows * cols);
+
+            return dbsod::dbsod(data, rows, cols, eps_space, min_pts);
+        },
+        py::arg("data"),
+        py::arg("eps_space"),
+        py::arg("min_pts"),
+        "Calculates normalized outlierness scores using DBSOD algorithm."
+    );
 }
