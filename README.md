@@ -59,7 +59,6 @@ outlierness_scores = dbsod(
     X=DATA,
     eps_space=EPS_SPACE,
     min_pts=MIN_PTS,
-    metric='euclidean'
 )
 
 print(outlierness_scores)
