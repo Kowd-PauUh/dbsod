@@ -24,4 +24,5 @@ def test_dbsod_correctness():
         eps_space=EPS_SPACE,
         min_pts=MIN_PTS,
     )
+    assert isinstance(result, np.ndarray), "Expected result to be a numpy ndaray"
     np.testing.assert_allclose(result, EXPECTED_RESULT, atol=1e-6)
