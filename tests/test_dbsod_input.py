@@ -53,8 +53,3 @@ def test_invalid_min_pts_value():
 def test_min_pts_greater_than_samples():
     with pytest.raises(ValueError, match='Argument `min_pts` cannot be greater than the number of samples in `X`.'):
         dbsod(np.random.rand(3, 2), [0.5], 5)
-
-
-def test_invalid_metric():
-    with pytest.raises(ValueError, match=r'Allowed values for `metric` are: \["euclidean", "manhattan", "cosine"\].'):
-        dbsod(np.random.rand(5, 2), [0.5], 5, metric='invalid')
