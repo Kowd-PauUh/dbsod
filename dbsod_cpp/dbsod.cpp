@@ -65,9 +65,12 @@ std::vector<double> get_outlierness_score(
     std::vector<double> labels(n, 1.0);  // all points are initially outliers
     std::vector<bool> core(n, false); 
 
+    // sort eps space
+    std::sort(eps_space.begin(), eps_space.end());
+
     size_t current = 0;
     for (double eps : eps_space) {
-        pbar(/*current=*/current++, /*total=*/m - 1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
+        pbar(/*current=*/current++, /*total=*/m - 1, /*width=*/20, /*desc=*/"Identifying outliers for each value in `eps_space`:");
         
         double eps2 = eps * eps;
 
