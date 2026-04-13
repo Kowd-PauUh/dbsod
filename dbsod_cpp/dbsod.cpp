@@ -98,30 +98,30 @@ std::vector<double> get_outlierness_score(
 
 std::vector<double> dbsod(
     py::array_t<double, py::array::c_style> data,
-    std::vector<double> epsSpace,
-    int minPts
+    std::vector<double> eps_space,
+    size_t min_pts
 ) {
     // validate input
     if (data.size() == 0) {
         throw std::invalid_argument("`data` is empty.");
     }
-    if (epsSpace.empty()) {
-        throw std::invalid_argument("`epsSpace` is empty.");
+    if (eps_space.empty()) {
+        throw std::invalid_argument("`eps_space` is empty.");
     }
 
     // get read-only data span
     auto buf = data.request();
     size_t rows = buf.shape[0];
     size_t cols = buf.shape[1];
-    double* dataPtr = static_cast<double*>(buf.ptr);
-    std::span<const double> span_data(dataPtr, rows * cols);
+    double* data_ptr = static_cast<double*>(buf.ptr);
+    std::span<const double> span_data(data_ptr, rows * cols);
 
     // build k-d tree
     kd_tree::KDTree tree(span_data, rows, cols);
 
     // get radius neighborhood graph
-    auto maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
-    auto neighbors = tree.radius_neighborhood_graph(maxEps);
+    auto max_eps = *std::max_element(eps_space.begin(), eps_space.end());
+    auto neighbors = tree.radius_neighborhood_graph(max_eps);
 
     // sort each point's neighbors by distance
     for (auto &n : neighbors) {
@@ -135,10 +135,10 @@ std::vector<double> dbsod(
     }
 
     // compute core threshold for each point
-    auto core_threshold = get_core_threshold(neighbors, minPts);
+    auto core_threshold = get_core_threshold(neighbors, min_pts);
 
     // compute outlierness score for each point
-    auto result = get_outlierness_score(neighbors, epsSpace, core_threshold);
+    auto result = get_outlierness_score(neighbors, eps_space, core_threshold);
 
     return result;
 }
