@@ -71,7 +71,7 @@ std::vector<double> get_outlierness_score(
 
         // identify which points are core for this epsilon value
         for (size_t i = 0; i < n; ++i) {
-            core[i] = core_threshold[i] <= eps;
+            core[i] = core_threshold[i] <= eps2;
         }
 
         // expand clusters
