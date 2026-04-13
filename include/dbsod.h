@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef DBSOD_H
-#define DBSOD_H
+#pragma once
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
-
-namespace py = pybind11;
+namespace dbsod {
 
 std::vector<double> dbsod(
-    py::array_t<double, py::array::c_style> data,
-    std::vector<double> eps_space,
+    const std::span<const double> &data,
+    size_t rows,
+    size_t cols,
+    std::vector<double> &eps_space,
     size_t min_pts
 );
 
-#endif // DBSOD_H
+}  // namespace dbsod
