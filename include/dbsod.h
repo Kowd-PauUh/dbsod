@@ -25,7 +25,6 @@ namespace py = pybind11;
 
 py::array_t<double> dbsod(
     py::array_t<double, py::array::c_style> data,
-    std::string metric,
     std::vector<float> epsSpace,
     int minPts
 );
