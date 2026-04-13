@@ -18,13 +18,16 @@
 #define OUTLIERS_H
 
 #include "outliers.h"
+
 #include <vector>
 #include <Eigen/Dense>
 
+#include "kd_tree.h"
+
 Eigen::VectorXi outliers(
-    std::vector<std::vector<std::pair<int, float>>>& neighbors,
+    std::vector<std::vector<kd_tree::Neighbor>>& neighbors,
     int minPts,
-    float eps
+    double eps
 );
 
 #endif // OUTLIERS_H
