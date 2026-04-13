@@ -50,17 +50,51 @@ std::vector<double> get_core_threshold(
     return core_threshold;
 }
 
-
 std::vector<double> get_outlierness_score(
     const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
-    std::vector<double> &eps_space
+    std::vector<double> &eps_space,
+    std::vector<double> &core_threshold
 ) {
-    // TODO
-    // for (size_t i = 0; i < eps_space.size(); i++) {
-    //     pbar(/*current=*/i, /*total=*/eps_space.size() - 1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
-    // }
-}
+    size_t n = neighbors.size();
+    size_t m = eps_space.size();
+    std::vector<double> result(n, 0.0);
 
+    std::vector<size_t> ptr(n, 0);
+    std::vector<double> labels(n, 1.0);  // all points are initially outliers
+    std::vector<bool> core(n, false); 
+
+    size_t current = 0;
+    for (double eps : eps_space) {
+        pbar(/*current=*/current++, /*total=*/m - 1, /*width=*/20, /*desc=*/"Identifying outliers for each `epsilon` value:");
+        
+        double eps2 = eps * eps;
+
+        // identify which points are core for this epsilon value
+        for (size_t i = 0; i < n; ++i) {
+            core[i] = core_threshold[i] <= eps;
+        }
+
+        // expand clusters
+        for (size_t i = 0; i < n; ++i) {
+            if (core[i]) {
+                labels[i] = 0.0;
+
+                // incremental neighbor expansion
+                while (ptr[i] < neighbors[i].size() && neighbors[i][ptr[i]].dist2 <= eps2) {
+                    labels[neighbors[i][ptr[i]].index] = 0.0;
+                    ptr[i]++;
+                }
+            }
+        }
+
+        // aggregate labels
+        for (size_t i = 0; i < n; ++i) {
+            result[i] += labels[i];
+        }
+    }
+
+    return result;
+}
 
 std::vector<double> dbsod(
     py::array_t<double, py::array::c_style> data,
@@ -103,5 +137,8 @@ std::vector<double> dbsod(
     // compute core threshold for each point
     auto core_threshold = get_core_threshold(neighbors, minPts);
 
-    return core_threshold;
+    // compute outlierness score for each point
+    auto result = get_outlierness_score(neighbors, epsSpace, core_threshold);
+
+    return result;
 }
