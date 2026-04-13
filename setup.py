@@ -10,7 +10,6 @@ ext_modules = [
         sources=glob.glob("dbsod_cpp/*.cpp"),
         include_dirs=[
             "include",
-            "/usr/include/eigen3",
             pybind11.get_include(),
         ],
         language="c++",
