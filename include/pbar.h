@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Ivan Danylenko
+ * Copyright 2026 Ivan Danylenko
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 #include <string>
 
 void pbar(
-    int current,
-    int total,
-    int width,
+    size_t current,
+    size_t total,
+    size_t width,
     const std::string& desc
 );
 

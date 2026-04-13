@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Ivan Danylenko
+ * Copyright 2026 Ivan Danylenko
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,12 @@
 #include <pybind11/stl.h>
 
 #include <vector>
-#include <string>
 #include <functional>
 #include <algorithm>
 
 #include <Eigen/Dense>
 
-#include "distances.h"
-#include "neighborhood.h"
+#include "kd_tree.h"
 #include "outliers.h"
 #include "pbar.h"
 
@@ -36,8 +34,7 @@ namespace py = pybind11;
 
 py::array_t<double> dbsod(
     py::array_t<double, py::array::c_style> data,
-    std::string metric,
-    std::vector<float> epsSpace,
+    std::vector<double> epsSpace,
     int minPts
 ) {
     // validate input
@@ -48,27 +45,19 @@ py::array_t<double> dbsod(
         throw std::invalid_argument("`epsSpace` is empty.");
     }
 
-    // map data to Eigen
+    // get read-only data span
     auto buf = data.request();
-    int rows = buf.shape[0];
-    int cols = buf.shape[1];
+    size_t rows = buf.shape[0];
+    size_t cols = buf.shape[1];
     double* dataPtr = static_cast<double*>(buf.ptr);
-    Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> X(dataPtr, rows, cols);
+    std::span<const double> span_data(dataPtr, rows * cols);
 
-    // get distance function based on metricPtr argument
-    std::function<double(const Eigen::VectorXd&, const Eigen::VectorXd&)> distanceFn;
-    auto it = distanceFns.find(metric);
-    if (it != distanceFns.end()) {
-        distanceFn = it->second;
-    } else {
-        throw std::runtime_error(
-            "`metric` must be one of [\"euclidean\", \"manhattan\", \"cosine\"]."
-        );
-    }
+    // build k-d tree
+    kd_tree::KDTree tree(span_data, rows, cols);
 
-    // get neighbors within maxEps radius 
-    float maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
-    std::vector<std::vector<std::pair<int, float>>> neighbors = brute(X, distanceFn, maxEps);
+    // get radius neighborhood graph
+    double maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
+    auto neighbors = tree.radius_neighborhood_graph(maxEps);
 
     // compute outlierness scores
     Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);

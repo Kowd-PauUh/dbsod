@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Ivan Danylenko
+ * Copyright 2026 Ivan Danylenko
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@
 #include <string>
 
 void pbar(
-    int current,
-    int total,
-    int width = 20,
+    size_t current,
+    size_t total,
+    size_t width = 20,
     const std::string& desc = ""
 ) {
     static auto last_update = std::chrono::steady_clock::now();
-    static int last_count = 0;
+    static size_t last_count = 0;
     static double speed = 0.0;
 
     auto now = std::chrono::steady_clock::now();
@@ -36,7 +36,7 @@ void pbar(
     if (elapsed >= 100 || current == total) {
         // progress [%]
         float progress = static_cast<float>(current) / total;
-        int pos = width * progress;
+        size_t pos = width * progress;
 
         // speed [it/s]
         if (elapsed > 0) {
@@ -44,7 +44,7 @@ void pbar(
         }
 
         std::cout << desc << " [";
-        for (int i = 0; i < width; ++i) {
+        for (size_t i = 0; i < width; ++i) {
             if (i < pos) std::cout << "=";
             else if (i == pos) std::cout << ">";
             else std::cout << " ";

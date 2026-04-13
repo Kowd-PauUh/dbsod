@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Ivan Danylenko
+ * Copyright 2026 Ivan Danylenko
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ namespace py = pybind11;
 
 py::array_t<double> dbsod(
     py::array_t<double, py::array::c_style> data,
-    std::string metric,
-    std::vector<float> epsSpace,
+    std::vector<double> epsSpace,
     int minPts
 );
 
