@@ -20,6 +20,3 @@ notebook:
 # run tests
 test:
 	@ bash -c "source .venv/bin/activate && pytest tests/ -v --capture=sys"
-
-tree:
-	@ g++ -std=c++23 -fPIC test.cpp dbsod_cpp/kd_tree.cpp -Iinclude -o tmp && ./tmp && rm ./tmp
