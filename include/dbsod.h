@@ -16,6 +16,9 @@
 
 #pragma once
 
+#include <vector>
+#include <span>
+
 namespace dbsod {
 
 std::vector<double> dbsod(
