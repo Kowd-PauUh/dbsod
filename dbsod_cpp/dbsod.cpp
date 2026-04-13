@@ -57,29 +57,9 @@ py::array_t<double> dbsod(
     // build k-d tree
     kd_tree::KDTree tree(span_data, rows, cols);
 
-    // get neighbors within maxEps radius 
+    // get radius neighborhood graph
     double maxEps = *std::max_element(epsSpace.begin(), epsSpace.end());
-
-    std::vector<std::vector<std::pair<int, float>>> neighbors;
-    neighbors.resize(rows);
-
-    std::vector<double> query(cols);
-
-    for (size_t i = 0; i < rows; ++i) {
-        // extract i-th row into query vector
-        for (size_t j = 0; j < cols; ++j) {
-            query[j] = dataPtr[i * cols + j];
-        }
-
-        auto result = tree.query_radius(query, maxEps);
-
-        auto& out = neighbors[i];
-        out.reserve(result.size());
-
-        for (const auto& n : result) {
-            out.emplace_back(static_cast<int>(n.index), static_cast<float>(std::sqrt(n.dist2)));
-        }
-    }
+    auto neighbors = tree.radius_neighborhood_graph(maxEps);
 
     // compute outlierness scores
     Eigen::VectorXi scores = Eigen::VectorXi::Zero(rows);
