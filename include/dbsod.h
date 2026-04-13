@@ -25,7 +25,7 @@ std::vector<double> dbsod(
     const std::span<const double> data,
     size_t rows,
     size_t cols,
-    std::vector<double> &eps_space,
+    const std::span<const double> eps_space,
     size_t min_pts
 );
 
