@@ -22,7 +22,7 @@
 namespace dbsod {
 
 std::vector<double> dbsod(
-    const std::span<const double> &data,
+    const std::span<const double> data,
     size_t rows,
     size_t cols,
     std::vector<double> &eps_space,
