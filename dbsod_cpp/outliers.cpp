@@ -15,17 +15,22 @@
  */
 
 #include "outliers.h"
+
 #include <vector>
 #include <Eigen/Dense>
 
+#include "kd_tree.h"
+
 Eigen::VectorXi outliers(
-    std::vector<std::vector<std::pair<int, float>>>& neighbors,
+    std::vector<std::vector<kd_tree::Neighbor>>& neighbors,
     int minPts,
-    float eps
+    double eps
 ) {
     const int N = neighbors.size();
     Eigen::VectorXi labels = Eigen::VectorXi::Constant(N, 1);  // 1 means outlier/noise
     std::vector<bool> core(N, false);
+
+    double eps2 = eps * eps;
 
     // find core points
     for (int i = 0; i < N; i++) {
@@ -33,7 +38,7 @@ Eigen::VectorXi outliers(
         int neighbors_cnt = 0;
         int max_j = neighbors[i].size();
         for (int j = 0; j < max_j; j++) {
-            if (neighbors[i][j].second <= eps) {
+            if (neighbors[i][j].dist2 <= eps2) {
                 neighbors_cnt += 1;
             }
         }
@@ -50,8 +55,8 @@ Eigen::VectorXi outliers(
         labels[i] = 0;  // not an outlier/noise
         int max_j = neighbors[i].size();
         for (int j = 0; j < max_j; j++) {
-            if (neighbors[i][j].second <= eps) {
-                int index = neighbors[i][j].first;
+            if (neighbors[i][j].dist2 <= eps2) {
+                int index = neighbors[i][j].index;
                 labels[index] = 0;  // not an outlier/noise
             }
         }
