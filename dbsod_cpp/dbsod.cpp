@@ -32,6 +32,8 @@ constexpr double INF = std::numeric_limits<double>::max();
 
 namespace py = pybind11;
 
+namespace dbsod {
+
 std::vector<double> get_core_threshold(
     const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
     size_t min_pts
@@ -97,8 +99,10 @@ std::vector<double> get_outlierness_score(
 }
 
 std::vector<double> dbsod(
-    py::array_t<double, py::array::c_style> data,
-    std::vector<double> eps_space,
+    const std::span<const double> &data,
+    size_t rows,
+    size_t cols,
+    std::vector<double> &eps_space,
     size_t min_pts
 ) {
     // validate input
@@ -109,15 +113,8 @@ std::vector<double> dbsod(
         throw std::invalid_argument("`eps_space` is empty.");
     }
 
-    // get read-only data span
-    auto buf = data.request();
-    size_t rows = buf.shape[0];
-    size_t cols = buf.shape[1];
-    double* data_ptr = static_cast<double*>(buf.ptr);
-    std::span<const double> span_data(data_ptr, rows * cols);
-
     // build k-d tree
-    kd_tree::KDTree tree(span_data, rows, cols);
+    kd_tree::KDTree tree(data, rows, cols);
 
     // get radius neighborhood graph
     auto max_eps = *std::max_element(eps_space.begin(), eps_space.end());
@@ -142,3 +139,5 @@ std::vector<double> dbsod(
 
     return result;
 }
+
+}  // namespace dbsod
