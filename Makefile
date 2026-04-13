@@ -3,12 +3,6 @@ install_g++:
 	@ sudo apt-get update
 	@ sudo apt-get install g++ -y
 
-# install eigen
-install_eigen:
-	@ echo "Installing eigen..."
-	@ sudo apt-get update
-	@ sudo apt-get install libeigen3-dev -y
-
 # create .venv, install dependencies and dbsod in dev mode
 venv:
 	@ uv venv
@@ -25,4 +19,4 @@ notebook:
 
 # run tests
 test:
-	@ bash -c "source .venv/bin/activate && pytest tests/ -v"
+	@ bash -c "source .venv/bin/activate && pytest tests/ -v --capture=sys"

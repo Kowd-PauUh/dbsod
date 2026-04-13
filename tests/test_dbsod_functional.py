@@ -15,7 +15,6 @@ DATA = np.array(
 )
 EPS_SPACE = [0.15, 0.22]
 MIN_PTS = 2
-METRIC = 'euclidean'
 EXPECTED_RESULT = np.array([0.0, 0.5, 0.0, 0.0, 1.0])
 
 
@@ -25,4 +24,5 @@ def test_dbsod_correctness():
         eps_space=EPS_SPACE,
         min_pts=MIN_PTS,
     )
+    assert isinstance(result, np.ndarray), "Expected result to be a numpy ndaray"
     np.testing.assert_allclose(result, EXPECTED_RESULT, atol=1e-6)

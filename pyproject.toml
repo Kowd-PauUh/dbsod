@@ -43,4 +43,3 @@ packages = ["dbsod"]
 
 [tool.cibuildwheel]
 skip = ["*musllinux*"]
-before-build = "yum install -y eigen3-devel"

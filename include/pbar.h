@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-#ifndef PBAR_H
-#define PBAR_H
+#pragma once
 
 #include "pbar.h"
 #include <string>
@@ -26,5 +25,3 @@ void pbar(
     size_t width,
     const std::string& desc
 );
-
-#endif // PBAR_H

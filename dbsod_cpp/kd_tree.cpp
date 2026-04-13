@@ -131,7 +131,8 @@ std::vector<std::vector<Neighbor>> KDTree::radius_neighborhood_graph(double r) c
 
     // query for each row
     for (size_t i = 0; i < rows; ++i) {
-        pbar(/*current=*/i, /*total=*/rows - 1, /*width=*/20, /*desc=*/"Building neighborhood graph:");
+        pbar(/*current=*/i, /*total=*/rows - 1, /*width=*/20,
+             /*desc=*/"Building neighborhood graph:                       ");
 
         auto query = data.subspan(i * cols, cols);
         result[i] = query_radius(query, r);

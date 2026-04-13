@@ -27,7 +27,6 @@ Alternatively (for instance if you want to contribute) you may clone this reposi
 git clone https://github.com/Kowd-PauUh/dbsod.git
 cd dbsod
 make install_g++
-make install_eigen
 make venv
 ```
 
@@ -60,7 +59,6 @@ outlierness_scores = dbsod(
     X=DATA,
     eps_space=EPS_SPACE,
     min_pts=MIN_PTS,
-    metric='euclidean'
 )
 
 print(outlierness_scores)
