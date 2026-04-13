@@ -76,7 +76,7 @@ def dbsod(
 
     # cast arrays to appropriate data types
     X = X.astype(np.float64, copy=False)
-    eps_space = np.array(eps_space).astype(np.float32)
+    eps_space = np.array(eps_space).astype(np.float64)
 
     return dbsod_cpp.dbsod(X, eps_space, min_pts)
 

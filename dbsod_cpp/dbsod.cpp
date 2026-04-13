@@ -36,7 +36,7 @@ namespace py = pybind11;
 
 py::array_t<double> dbsod(
     py::array_t<double, py::array::c_style> data,
-    std::vector<float> epsSpace,
+    std::vector<double> epsSpace,
     int minPts
 ) {
     // validate input
