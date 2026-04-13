@@ -54,8 +54,8 @@ std::vector<double> get_core_threshold(
 
 std::vector<double> get_outlierness_score(
     const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
-    std::vector<double> &eps_space,
-    std::vector<double> &core_threshold
+    const std::span<const double> eps_space,
+    const std::vector<double> &core_threshold
 ) {
     size_t n = neighbors.size();
     size_t m = eps_space.size();
@@ -66,10 +66,11 @@ std::vector<double> get_outlierness_score(
     std::vector<bool> core(n, false); 
 
     // sort eps space
-    std::sort(eps_space.begin(), eps_space.end());
+    std::vector<double> sorted_eps_space(eps_space.begin(), eps_space.end());
+    std::sort(sorted_eps_space.begin(), sorted_eps_space.end());
 
     size_t current = 0;
-    for (double eps : eps_space) {
+    for (double eps : sorted_eps_space) {
         pbar(/*current=*/current++, /*total=*/m - 1, /*width=*/20, /*desc=*/"Identifying outliers for each value in `eps_space`:");
         
         double eps2 = eps * eps;
@@ -105,7 +106,7 @@ std::vector<double> dbsod(
     const std::span<const double> data,
     size_t rows,
     size_t cols,
-    std::vector<double> &eps_space,
+    const std::span<const double> eps_space,
     size_t min_pts
 ) {
     // validate input
