@@ -24,7 +24,7 @@ namespace kd_tree {
 
 struct Neighbor {
     size_t index;
-    double dist;
+    double dist2;
 };
 
 class KDTree {
