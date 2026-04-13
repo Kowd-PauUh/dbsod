@@ -108,4 +108,17 @@ std::vector<Neighbor> KDTree::query_radius(const std::span<const double> &query,
     return result;
 }
 
+std::vector<std::vector<Neighbor>> KDTree::radius_neighborhood_graph(double r) const {
+    std::vector<std::vector<Neighbor>> result;
+    result.resize(rows);
+
+    // query for each row
+    for (size_t i = 0; i < rows; ++i) {
+        auto query = data.subspan(i * cols, cols);
+        result[i] = query_radius(query, r);
+    }
+
+    return result;
 }
+
+}  // namespace kd_tree
