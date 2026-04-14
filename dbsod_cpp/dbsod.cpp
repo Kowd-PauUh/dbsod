@@ -143,9 +143,7 @@ std::vector<double> dbsod(
     const std::span<const double> eps_space,
     size_t min_pts
 ) {
-    DBSOD model(eps_space, min_pts);
-    model.fit(data, rows, cols);
-    return model.outlierness_score;
+    return DBSOD(eps_space, min_pts).fit(data, rows, cols).outlierness_score;
 }
 
 }  // namespace dbsod
