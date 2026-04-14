@@ -20,7 +20,7 @@ EXPECTED_RESULT = np.array([0.0, 0.5, 0.0, 0.0, 1.0])
 
 def test_dbsod_correctness():
     result = dbsod(
-        X=DATA,
+        data=DATA,
         eps_space=EPS_SPACE,
         min_pts=MIN_PTS,
     )
