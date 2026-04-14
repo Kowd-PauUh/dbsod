@@ -94,15 +94,6 @@ void DBSOD::compute_outlierness_score(const std::vector<std::vector<kd_tree::Nei
     }
 }
 
-void normalize(std::vector<double> &vec) {
-    double max_val = *std::max_element(vec.begin(), vec.end());
-    if (max_val > 0.0) {
-        for (double &val : vec) {
-            val /= max_val;
-        }
-    }
-}
-
 DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) {
     // validate input
     if (data.size() == 0) {
@@ -135,7 +126,9 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
     compute_outlierness_score(neighbors);
 
     // normalize outlierness scores
-    normalize(outlierness_score);
+    for (double &score : outlierness_score) {
+        score /= eps_space.size();
+    }
 
     return *this;
 }
@@ -186,7 +179,9 @@ std::vector<double> DBSOD::predict(const std::span<const double> data, size_t ro
     }
 
     // normalize outlierness scores
-    normalize(result);
+    for (double &score : result) {
+        score /= eps_space.size();
+    }
 
     return result;
 }
