@@ -146,20 +146,35 @@ std::vector<double> DBSOD::predict(const std::span<const double> data, size_t ro
     // compute outlierness score for each point
     for (size_t i = 0; i < rows; ++i) {
         auto query = data.subspan(i * cols, cols);
+        auto neighbors = tree->query_radius(query, max_eps);
+
+        // sort neighbors by distance
+        std::sort(
+            neighbors.begin(),
+            neighbors.end(),
+            [](const auto &a, const auto &b) {
+                return a.dist2 < b.dist2;
+            }
+        );
+
         double score = 0.0;
+        bool is_outlier = true;
 
         for (double eps : eps_space) {
             double eps2 = eps * eps;
 
-            auto neighbors = tree->query_radius(query, eps);
-            bool is_outlier = true;
-            
-            for (auto &n : neighbors) {
-                // mark point as non-outlier as soon as there is a reachable neighbor which is a core point
-                if (core_threshold[n.index] <= eps2) {                   
+            size_t neighbor_idx = 0;
+            while (
+                is_outlier
+                && neighbor_idx < neighbors.size()
+                && neighbors[neighbor_idx].dist2 < eps2
+            ) {
+                // mark point as non-outlier as soon as there is a reachable neighbor
+                // which is a core point from this epsilon value onward
+                if (core_threshold[neighbors[neighbor_idx].index] <= eps2) {                   
                     is_outlier = false;
-                    break;
                 }
+                neighbor_idx++;
             }
 
             if (!is_outlier) break;  // end loop as the point is no longer an outlier
