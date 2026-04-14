@@ -94,6 +94,15 @@ void DBSOD::compute_outlierness_score(const std::vector<std::vector<kd_tree::Nei
     }
 }
 
+void normalize(std::vector<double> &vec) {
+    double max_val = *std::max_element(vec.begin(), vec.end());
+    if (max_val > 0.0) {
+        for (double &val : vec) {
+            val /= max_val;
+        }
+    }
+}
+
 DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) {
     // validate input
     if (data.size() == 0) {
@@ -107,7 +116,7 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
     tree = std::make_unique<kd_tree::KDTree>(data, rows, cols);
 
     // get radius neighborhood graph
-    auto max_eps = *std::max_element(eps_space.begin(), eps_space.end());
+    max_eps = *std::max_element(eps_space.begin(), eps_space.end());
     auto neighbors = tree->radius_neighborhood_graph(max_eps);
 
     // sort each point's neighbors by distance
@@ -126,12 +135,7 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
     compute_outlierness_score(neighbors);
 
     // normalize outlierness scores
-    auto max_score = *std::max_element(outlierness_score.begin(), outlierness_score.end());
-    if (max_score > 0.0) {
-        for (auto &score : outlierness_score) {
-            score /= max_score;
-        }
-    }
+    normalize(outlierness_score);
 
     return *this;
 }
