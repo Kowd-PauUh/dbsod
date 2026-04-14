@@ -37,6 +37,7 @@ namespace dbsod {
 DBSOD::DBSOD(const std::span<const double> eps_space_, size_t min_pts)
     : eps_space(eps_space_.begin(), eps_space_.end()), min_pts(min_pts)
 {
+    // sort eps space
     std::sort(eps_space.begin(), eps_space.end());
 }
 
@@ -126,8 +127,10 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
 
     // normalize outlierness scores
     auto max_score = *std::max_element(outlierness_score.begin(), outlierness_score.end());
-    for (auto &score : outlierness_score) {
-        score /= max_score;
+    if (max_score > 0.0) {
+        for (auto &score : outlierness_score) {
+            score /= max_score;
+        }
     }
 
     return *this;
