@@ -32,6 +32,7 @@ class DBSOD {
     // initialized in .fit
     std::unique_ptr<kd_tree::KDTree> tree;
     std::vector<double> core_threshold;
+    double max_eps;
 
     void compute_core_threshold(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors);
     void compute_outlierness_score(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors);
