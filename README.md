@@ -46,20 +46,23 @@ DATA = np.array([
 ])
 ```
 
-We can use `dbsod` to calculate outlierness score for each point:
+We can use `DBSOD` to calculate outlierness score for each point:
 
 ```python
-from dbsod import dbsod
+from dbsod import dbsod, DBSOD
 
 EPS_SPACE = [0.15, 0.22]  # `eps` parameters used for calculating normalized outlierness score
 MIN_PTS = 2               # minimum number of neighbors for the data point to become "core" point
 
-# compute outlierness scores
-outlierness_scores = dbsod(
-    X=DATA,
+# Initialize model
+model = DBSOD(
     eps_space=EPS_SPACE,
     min_pts=MIN_PTS,
 )
+
+# Fit model and get outlierness scores of the training data points
+# This can be also achieved using `dbsod(X=DATA, eps_space=EPS_SPACE, min_pts=MIN_PTS)`
+outlierness_scores = model.fit(X=DATA).outlierness_score
 
 print(outlierness_scores)
 ```
