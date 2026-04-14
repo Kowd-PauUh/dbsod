@@ -18,8 +18,31 @@
 
 #include <vector>
 #include <span>
+#include <memory>
+
+#include "kd_tree.h"
 
 namespace dbsod {
+
+class DBSOD {
+  private:
+    std::vector<double> eps_space;
+    size_t min_pts;
+
+    // initialized in .fit
+    std::unique_ptr<kd_tree::KDTree> tree;
+    std::vector<double> core_threshold;
+
+    void compute_core_threshold(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors);
+    void compute_outlierness_score(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors);
+
+  public:
+    std::vector<double> outlierness_score;  // initialized in .fit
+
+    DBSOD(const std::span<const double> eps_space, size_t min_pts);
+    DBSOD& fit(const std::span<const double> data, size_t rows, size_t cols);
+    std::vector<double> predict(const std::span<const double> data, size_t rows, size_t cols);
+};
 
 std::vector<double> dbsod(
     const std::span<const double> data,
