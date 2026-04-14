@@ -140,6 +140,42 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
     return *this;
 }
 
+std::vector<double> DBSOD::predict(const std::span<const double> data, size_t rows, size_t cols) {
+    std::vector<double> result(rows, 0.0);
+
+    // compute outlierness score for each point
+    for (size_t i = 0; i < rows; ++i) {
+        auto query = data.subspan(i * cols, cols);
+        double score = 0.0;
+
+        for (double eps : eps_space) {
+            double eps2 = eps * eps;
+
+            auto neighbors = tree->query_radius(query, eps);
+            bool is_outlier = true;
+            
+            for (auto &n : neighbors) {
+                // mark point as non-outlier as soon as there is a reachable neighbor which is a core point
+                if (core_threshold[n.index] <= eps2) {                   
+                    is_outlier = false;
+                    break;
+                }
+            }
+
+            if (!is_outlier) break;  // end loop as the point is no longer an outlier
+        
+            score += 1.0;
+        }
+
+        result[i] = score;
+    }
+
+    // normalize outlierness scores
+    normalize(result);
+
+    return result;
+}
+
 std::vector<double> dbsod(
     const std::span<const double> data,
     size_t rows,
