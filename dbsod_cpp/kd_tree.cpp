@@ -31,7 +31,9 @@ double KDTree::get_value(size_t row, size_t col) const {
     return data[row * cols + col];
 }
 
-KDTree::KDTree(const std::span<const double> &data_, size_t rows_, size_t cols_) : data(data_), rows(rows_), cols(cols_) {
+KDTree::KDTree(const std::span<const double> &data_, size_t rows_, size_t cols_)
+    : data(data_.begin(), data_.end()), rows(rows_), cols(cols_)
+{
     std::vector<size_t> indices(rows);
     std::iota(indices.begin(), indices.end(), 0);
 
@@ -134,7 +136,7 @@ std::vector<std::vector<Neighbor>> KDTree::radius_neighborhood_graph(double r) c
         pbar(/*current=*/i, /*total=*/rows - 1, /*width=*/20,
              /*desc=*/"Building neighborhood graph:                       ");
 
-        auto query = data.subspan(i * cols, cols);
+        std::span<const double> query(&data[i * cols], cols);
         result[i] = query_radius(query, r);
     }
 
