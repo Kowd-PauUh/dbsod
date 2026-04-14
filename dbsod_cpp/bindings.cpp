@@ -43,9 +43,41 @@ PYBIND11_MODULE(dbsod_cpp, m) {
             auto result = dbsod::dbsod(data, rows, cols, eps_space_, min_pts);
             return py::array_t<double>(result.size(), result.data());
         },
-        py::arg("data"),
+        py::arg("X"),
         py::arg("eps_space"),
         py::arg("min_pts"),
         "Calculates normalized outlierness scores using DBSOD algorithm."
     );
+
+    py::class_<dbsod::DBSOD>(m, "DBSOD")
+        .def(py::init([](py::array_t<double, py::array::c_style | py::array::forcecast> eps_space,
+                         size_t min_pts)
+                      {
+                          std::span<const double> eps_space_(eps_space.data(), eps_space.size());  // read-only span
+                          return dbsod::DBSOD(eps_space_, min_pts);
+                      }),
+                      py::arg("eps_space"),
+                      py::arg("min_pts"))
+
+        .def("fit",
+            [](dbsod::DBSOD &self,
+               py::array_t<double, py::array::c_style | py::array::forcecast> X)
+            {
+                size_t rows = static_cast<size_t>(X.shape(0));
+                size_t cols = static_cast<size_t>(X.shape(1));
+
+                std::span<const double> data(X.data(), rows * cols);  // read-only span
+                return &self.fit(data, rows, cols);
+            },
+            py::arg("X"),
+            py::return_value_policy::reference_internal
+        )
+
+        .def_property_readonly("outlierness_score",
+            [](const dbsod::DBSOD &self)
+            {
+                const auto &vec = self.outlierness_score;
+                return py::array_t<double>(vec.size(), vec.data());
+            }
+        );
 }
