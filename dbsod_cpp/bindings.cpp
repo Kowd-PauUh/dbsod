@@ -33,6 +33,11 @@ PYBIND11_MODULE(dbsod_cpp, m) {
            py::array_t<double, py::array::c_style | py::array::forcecast> eps_space,
            size_t min_pts)
         {
+            // validate input data
+            if (X.ndim() != 2) {
+                throw std::runtime_error("`X` must be a 2D array");
+            }
+
             size_t rows = static_cast<size_t>(X.shape(0));
             size_t cols = static_cast<size_t>(X.shape(1));
 
@@ -63,6 +68,11 @@ PYBIND11_MODULE(dbsod_cpp, m) {
             [](dbsod::DBSOD &self,
                py::array_t<double, py::array::c_style | py::array::forcecast> X)
             {
+                // validate input data
+                if (X.ndim() != 2) {
+                    throw std::runtime_error("`X` must be a 2D array");
+                }
+
                 size_t rows = static_cast<size_t>(X.shape(0));
                 size_t cols = static_cast<size_t>(X.shape(1));
 
