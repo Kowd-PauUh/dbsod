@@ -42,6 +42,7 @@ class DBSOD {
 
     DBSOD(const std::span<const double> eps_space, size_t min_pts);
     DBSOD& fit(const std::span<const double> data, size_t rows, size_t cols);
+    std::vector<double> fit_predict(const std::span<const double> data, size_t rows, size_t cols);
     std::vector<double> predict(const std::span<const double> data, size_t rows, size_t cols);
 };
 

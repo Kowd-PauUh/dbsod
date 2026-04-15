@@ -133,6 +133,10 @@ DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) 
     return *this;
 }
 
+std::vector<double> DBSOD::fit_predict(const std::span<const double> data, size_t rows, size_t cols) {
+    return fit(data, rows, cols).outlierness_score;
+}
+
 std::vector<double> DBSOD::predict(const std::span<const double> data, size_t rows, size_t cols) {
     std::vector<double> result(rows, 0.0);
 
@@ -173,7 +177,7 @@ std::vector<double> dbsod(
     const std::span<const double> eps_space,
     size_t min_pts
 ) {
-    return DBSOD(eps_space, min_pts).fit(data, rows, cols).outlierness_score;
+    return DBSOD(eps_space, min_pts).fit_predict(data, rows, cols);
 }
 
 }  // namespace dbsod
