@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{times}
+\usepackage{fancyhdr,graphicx,amsmath,amssymb}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[active,tightpage]{preview}
+
+\PreviewEnvironment{algorithm}
+\begin{document}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Dataset \( X \in \mathbb{R}^{n \times M} \), neighborhood radii \( \{ \epsilon_1, \epsilon_2, \ldots, \epsilon_N \} \), minimum number of samples \texttt{minPts} to form a dense region.}
+\KwOut{Outlierness scores vector \(S \in \mathbb{R}^n \) with normalized outlierness values. Each value is within \([0; 1]\) range. Values closer to 1 indicate stronger outliers.}
+
+Initialize outlierness scores vector \(S \leftarrow \mathbf{0} \in \mathbb{R}^n\)\;
+
+Build spatial index (k-d tree) on dataset \( X \)\;
+
+\For{\( i \leftarrow 1 \) \KwTo \( N \)}{
+    Given parameters \( \epsilon = \epsilon_i \) and \texttt{minPts}:
+    
+    % \tcp{Simplified DBSCAN steps:}
+    \Indp
+    Identify core points with at least \texttt{minPts} neighbors within radius \(\epsilon_i\)\;
+    
+    Expand clusters from core points (without assigning explicit cluster labels)\;
+
+    Assign binary outlier labels \( l_i \in \{0,1\}^n \), where 1 denotes an outlier\;
+    \Indm
+    
+    Update scores: \(S \leftarrow S + l_i\)\;
+}
+
+Normalize scores by number of radius values:  
+\[
+S \leftarrow \frac{S}{N}
+\]
+
+\Return \(S\);
+
+\caption{DBSOD: Density-Based Spatial Outlier Detection}
+\end{algorithm}
+
+\end{document}

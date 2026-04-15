@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#include "dbsod.h"
-
 #include <vector>
 #include <span>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
+
+#include "dbsod.h"
 
 namespace py = pybind11;
 
@@ -78,6 +78,26 @@ PYBIND11_MODULE(dbsod_cpp, m) {
 
                 std::span<const double> data(X.data(), rows * cols);  // read-only span
                 return &self.fit(data, rows, cols);
+            },
+            py::arg("X"),
+            py::return_value_policy::reference_internal
+        )
+
+        .def("fit_predict",
+            [](dbsod::DBSOD &self,
+               py::array_t<double, py::array::c_style | py::array::forcecast> X)
+            {
+                // validate input data
+                if (X.ndim() != 2) {
+                    throw std::runtime_error("`X` must be a 2D array");
+                }
+
+                size_t rows = static_cast<size_t>(X.shape(0));
+                size_t cols = static_cast<size_t>(X.shape(1));
+
+                std::span<const double> data(X.data(), rows * cols);  // read-only span
+                auto result = self.fit_predict(data, rows, cols);
+                return py::array_t<double>(result.size(), result.data());
             },
             py::arg("X"),
             py::return_value_policy::reference_internal
