@@ -35,4 +35,4 @@ test_py:
 	@ bash -c "source .venv/bin/activate && pytest tests/ -v --capture=sys"
 
 # run tests
-test: test_cpp test_py
+test: test_cpp rebuild test_py
