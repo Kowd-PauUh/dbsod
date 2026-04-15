@@ -141,41 +141,21 @@ std::vector<double> DBSOD::predict(const std::span<const double> data, size_t ro
         auto query = data.subspan(i * cols, cols);
         auto neighbors = tree->query_radius(query, max_eps);
 
-        // sort neighbors by distance
-        std::sort(
-            neighbors.begin(),
-            neighbors.end(),
-            [](const auto &a, const auto &b) {
-                return a.dist2 < b.dist2;
-            }
-        );
-
-        double score = 0.0;
-        bool is_outlier = true;
-
-        for (double eps : eps_space) {
-            double eps2 = eps * eps;
-
-            size_t neighbor_idx = 0;
-            while (
-                is_outlier
-                && neighbor_idx < neighbors.size()
-                && neighbors[neighbor_idx].dist2 < eps2
-            ) {
-                // mark point as non-outlier as soon as there is a reachable neighbor
-                // which is a core point from this epsilon value onward
-                if (core_threshold[neighbors[neighbor_idx].index] <= eps2) {                   
-                    is_outlier = false;
-                }
-                neighbor_idx++;
-            }
-
-            if (!is_outlier) break;  // end loop as the point is no longer an outlier
-        
-            score += 1.0;
+        // find lowest eps2 at which point becomes a nonoutlier
+        double min_nonoutlier_eps2 = INF;
+        for (auto &n : neighbors) {
+            min_nonoutlier_eps2 = std::min(
+                min_nonoutlier_eps2,
+                std::max(n.dist2, core_threshold[n.index])
+            );
         }
 
-        result[i] = score;
+        // binary search for index of lowest eps at which point becomes a nonoutlier
+        double min_nonoutlier_eps = std::sqrt(min_nonoutlier_eps2);
+        auto it = std::lower_bound(eps_space.begin(), eps_space.end(), min_nonoutlier_eps);
+
+        // score is the number of epsilon values at which point is an outlier
+        result[i] = static_cast<double>(std::distance(eps_space.begin(), it));
     }
 
     // normalize outlierness scores
