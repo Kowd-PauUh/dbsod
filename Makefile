@@ -3,6 +3,7 @@ install_g++:
 	@ sudo apt-get update
 	@ sudo apt-get install g++ -y
 
+# install gtest
 install_gtest:
 	@ sudo apt-get update
 	@ sudo apt-get install libgtest-dev -y
