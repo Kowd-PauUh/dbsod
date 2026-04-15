@@ -3,6 +3,10 @@ install_g++:
 	@ sudo apt-get update
 	@ sudo apt-get install g++ -y
 
+install_gtest:
+	@ sudo apt-get update
+	@ sudo apt-get install libgtest-dev -y
+
 # create .venv, install dependencies and dbsod in dev mode
 venv:
 	@ uv venv
