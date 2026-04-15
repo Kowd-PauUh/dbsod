@@ -21,6 +21,18 @@ rebuild:
 notebook:
 	@ bash -c "source .venv/bin/activate && jupyter lab --ip=0.0.0.0 --port 8502 --NotebookApp.token=''"
 
-# run tests
-test:
+# run cpp tests
+test_cpp:
+	@ g++ -std=c++23 \
+		$(filter-out dbsod_cpp/bindings.cpp, $(wildcard dbsod_cpp/*.cpp)) \
+		$(wildcard tests/*.cpp) \
+		-Iinclude -O3 -g -Wall -o test -lgtest -lgtest_main
+	@ ./test
+	@ rm test
+
+# run python tests
+test_py:
 	@ bash -c "source .venv/bin/activate && pytest tests/ -v --capture=sys"
+
+# run tests
+test: test_cpp test_py
