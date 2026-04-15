@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-#include "dbsod.h"
-
 #include <vector>
 #include <functional>
 #include <algorithm>
 #include <limits>
 #include <cmath>
 
-#include "kd_tree.h"
 #include "pbar.h"
+#include "kd_tree.h"
+#include "dbsod.h"
 
 constexpr double INF = std::numeric_limits<double>::max();
 

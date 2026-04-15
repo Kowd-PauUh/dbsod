@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#include "pbar.h"
 #include <iostream>
 #include <chrono>
 #include <string>
+
+#include "pbar.h"
 
 void pbar(
     size_t current,

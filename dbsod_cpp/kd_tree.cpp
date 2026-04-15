@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#include "kd_tree.h"
-
 #include <vector>
 #include <span>
 #include <stack>
@@ -24,6 +22,7 @@
 #include <algorithm>
 
 #include "pbar.h"
+#include "kd_tree.h"
 
 namespace kd_tree {
 
