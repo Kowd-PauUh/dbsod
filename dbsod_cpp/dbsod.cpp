@@ -16,21 +16,16 @@
 
 #include "dbsod.h"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <pybind11/stl.h>
-
 #include <vector>
 #include <functional>
 #include <algorithm>
 #include <limits>
+#include <cmath>
 
 #include "kd_tree.h"
 #include "pbar.h"
 
 constexpr double INF = std::numeric_limits<double>::max();
-
-namespace py = pybind11;
 
 namespace dbsod {
 
