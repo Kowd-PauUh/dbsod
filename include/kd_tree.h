@@ -36,7 +36,7 @@ class KDTree {
         std::unique_ptr<TreeNode> right;
     };
 
-    std::span<const double> data;  // row-major contiguous layout
+    std::vector<double> data;  // row-major contiguous layout
     size_t rows, cols;
     std::unique_ptr<TreeNode> root;
 

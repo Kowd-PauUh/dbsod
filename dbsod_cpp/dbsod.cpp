@@ -34,12 +34,16 @@ namespace py = pybind11;
 
 namespace dbsod {
 
-std::vector<double> get_core_threshold(
-    const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
-    size_t min_pts
-) {
+DBSOD::DBSOD(const std::span<const double> eps_space_, size_t min_pts)
+    : eps_space(eps_space_.begin(), eps_space_.end()), min_pts(min_pts)
+{
+    // sort eps space
+    std::sort(eps_space.begin(), eps_space.end());
+}
+
+void DBSOD::compute_core_threshold(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors) {
     size_t n = neighbors.size();
-    std::vector<double> core_threshold(n, INF);
+    core_threshold.assign(n, INF);
     
     // core threshold is squared distance from a point to its min_pts-th neighbor
     // (0-indexed, because point is its own neighbor)
@@ -48,29 +52,19 @@ std::vector<double> get_core_threshold(
             core_threshold[i] = neighbors[i][min_pts].dist2;
         }
     }
-
-    return core_threshold;
 }
 
-std::vector<double> get_outlierness_score(
-    const std::vector<std::vector<kd_tree::Neighbor>> &neighbors,
-    const std::span<const double> eps_space,
-    const std::vector<double> &core_threshold
-) {
+void DBSOD::compute_outlierness_score(const std::vector<std::vector<kd_tree::Neighbor>> &neighbors) {
     size_t n = neighbors.size();
     size_t m = eps_space.size();
-    std::vector<double> result(n, 0.0);
+    outlierness_score.assign(n, 0.0);
 
     std::vector<size_t> ptr(n, 0);
     std::vector<double> labels(n, 1.0);  // all points are initially outliers
     std::vector<bool> core(n, false); 
 
-    // sort eps space
-    std::vector<double> sorted_eps_space(eps_space.begin(), eps_space.end());
-    std::sort(sorted_eps_space.begin(), sorted_eps_space.end());
-
     size_t current = 0;
-    for (double eps : sorted_eps_space) {
+    for (double eps : eps_space) {
         pbar(/*current=*/current++, /*total=*/m - 1, /*width=*/20, /*desc=*/"Identifying outliers for each value in `eps_space`:");
         
         double eps2 = eps * eps;
@@ -95,20 +89,12 @@ std::vector<double> get_outlierness_score(
 
         // aggregate labels
         for (size_t i = 0; i < n; ++i) {
-            result[i] += labels[i];
+            outlierness_score[i] += labels[i];
         }
     }
-
-    return result;
 }
 
-std::vector<double> dbsod(
-    const std::span<const double> data,
-    size_t rows,
-    size_t cols,
-    const std::span<const double> eps_space,
-    size_t min_pts
-) {
+DBSOD& DBSOD::fit(const std::span<const double> data, size_t rows, size_t cols) {
     // validate input
     if (data.size() == 0) {
         throw std::invalid_argument("`data` is empty.");
@@ -118,11 +104,11 @@ std::vector<double> dbsod(
     }
 
     // build k-d tree
-    kd_tree::KDTree tree(data, rows, cols);
+    tree = std::make_unique<kd_tree::KDTree>(data, rows, cols);
 
     // get radius neighborhood graph
-    auto max_eps = *std::max_element(eps_space.begin(), eps_space.end());
-    auto neighbors = tree.radius_neighborhood_graph(max_eps);
+    max_eps = *std::max_element(eps_space.begin(), eps_space.end());
+    auto neighbors = tree->radius_neighborhood_graph(max_eps);
 
     // sort each point's neighbors by distance
     for (auto &n : neighbors) {
@@ -135,19 +121,63 @@ std::vector<double> dbsod(
         );
     }
 
-    // compute core threshold for each point
-    auto core_threshold = get_core_threshold(neighbors, min_pts);
-
-    // compute outlierness score for each point
-    auto result = get_outlierness_score(neighbors, eps_space, core_threshold);
+    // compute core threshold and outlierness score for each point
+    compute_core_threshold(neighbors);
+    compute_outlierness_score(neighbors);
 
     // normalize outlierness scores
-    auto max_score = *std::max_element(result.begin(), result.end());
-    for (auto &score : result) {
-        score /= max_score;
+    for (double &score : outlierness_score) {
+        score /= eps_space.size();
+    }
+
+    return *this;
+}
+
+std::vector<double> DBSOD::fit_predict(const std::span<const double> data, size_t rows, size_t cols) {
+    return fit(data, rows, cols).outlierness_score;
+}
+
+std::vector<double> DBSOD::predict(const std::span<const double> data, size_t rows, size_t cols) {
+    std::vector<double> result(rows, 0.0);
+
+    // compute outlierness score for each point
+    for (size_t i = 0; i < rows; ++i) {
+        auto query = data.subspan(i * cols, cols);
+        auto neighbors = tree->query_radius(query, max_eps);
+
+        // find lowest eps2 at which point becomes a nonoutlier
+        double min_nonoutlier_eps2 = INF;
+        for (auto &n : neighbors) {
+            min_nonoutlier_eps2 = std::min(
+                min_nonoutlier_eps2,
+                std::max(n.dist2, core_threshold[n.index])
+            );
+        }
+
+        // binary search for index of lowest eps at which point becomes a nonoutlier
+        double min_nonoutlier_eps = std::sqrt(min_nonoutlier_eps2);
+        auto it = std::lower_bound(eps_space.begin(), eps_space.end(), min_nonoutlier_eps);
+
+        // score is the number of epsilon values at which point is an outlier
+        result[i] = static_cast<double>(std::distance(eps_space.begin(), it));
+    }
+
+    // normalize outlierness scores
+    for (double &score : result) {
+        score /= eps_space.size();
     }
 
     return result;
+}
+
+std::vector<double> dbsod(
+    const std::span<const double> data,
+    size_t rows,
+    size_t cols,
+    const std::span<const double> eps_space,
+    size_t min_pts
+) {
+    return DBSOD(eps_space, min_pts).fit_predict(data, rows, cols);
 }
 
 }  // namespace dbsod

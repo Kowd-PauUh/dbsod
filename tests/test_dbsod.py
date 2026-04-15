@@ -18,7 +18,7 @@ MIN_PTS = 2
 EXPECTED_RESULT = np.array([0.0, 0.5, 0.0, 0.0, 1.0])
 
 
-def test_dbsod_correctness():
+def test_dbsod_functional():
     result = dbsod(
         X=DATA,
         eps_space=EPS_SPACE,
