@@ -136,6 +136,8 @@ std::vector<double> DBSOD::predict(const std::span<const double> data, size_t ro
 
     // compute outlierness score for each point
     for (size_t i = 0; i < rows; ++i) {
+        pbar(/*current=*/i, /*total=*/rows - 1, /*width=*/20, /*desc=*/"Estimating outlierness score for each point:       ");
+
         auto query = data.subspan(i * cols, cols);
         auto neighbors = tree->query_radius(query, max_eps);
 
