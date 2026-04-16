@@ -8,7 +8,7 @@ Official implementation of "DBSOD: Density-Based Spatial Outlier Detection". Pap
 
 While DBSCAN is a widely used clustering algorithm, it only provides a binary label for outliers and does not assign a continuous outlierness score. To address this limitation, we propose DBSOD, a density-based spatial outlier detection method inspired by DBSCAN. The algorithm estimates the consistency with which a data point is identified as an outlier across a range of neighborhood sizes:
 
-![DBSOD Algorithm](paper/algorithm.png "DBSOD Algorithm")
+![DBSOD Algorithm](https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/paper/algorithm.png "DBSOD Algorithm")
 
 The algorithm systematically varies the neighborhood size parameter $\epsilon$, evaluating outlierness across multiple density assumptions. By aggregating binary outlier classifications across these scales, it produces a normalized outlierness score for each point, reflecting how consistently the point is identified as an outlier.
 
@@ -72,7 +72,7 @@ The output will be: `array([0. , 0.5, 0. , 0. , 1. ])`.
 Below is the visualization of this example:
 
 <p align="center">
-  <img src="examples/figures/00-readme-example.png" width="500" />
+  <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/00-readme-example.png" width="500" />
 </p>
 
 Having fitted the `DBSOD`, we can estimate outlierness scores for the new data points:
@@ -94,8 +94,8 @@ Notice how we can use `DBSOD` to estimate outlierness of the points in a grid wi
 On the real-world data (check out [this](examples/01.%20Real%20Data.ipynb) and [this](examples/02.%20Predicting%20on%20New%20Data.ipynb) examples) result of applying `DBSOD` would look like this:
 
 <p align="center">
-  <img src="examples/figures/01-real-data.png" width="350" />
-  <img src="examples/figures/02-predicting-on-new-data.png" width="350" /> 
+  <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/01-real-data.png" width="350" />
+  <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/02-predicting-on-new-data.png" width="350" /> 
 </p>
 
 ## Citation
