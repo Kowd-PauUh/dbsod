@@ -91,7 +91,7 @@ The output of this is: `array([0.5, 0. , 0. , 0.5, 0. , 0. , 1. , 0.5, 1. ])`.
 
 Notice how we can use `DBSOD` to estimate outlierness of the points in a grid with an arbitrary resolution. This effectively allows us to create outlierness heatmaps.
 
-On the real-world data (check out [this](examples/01.%20Real%20Data.ipynb) and [this](examples/02.%20Predicting%20on%20New%20Data.ipynb) examples) result of applying `DBSOD` would look like this:
+On the real-world data (check out [this](https://github.com/Kowd-PauUh/dbsod/blob/main/examples/01.%20Real%20Data.ipynb) and [this](https://github.com/Kowd-PauUh/dbsod/blob/main/examples/02.%20Predicting%20on%20New%20Data.ipynb) examples) result of applying `DBSOD` would look like this:
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/01-real-data.png" width="350" />
