@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17806900.svg)](https://doi.org/10.5281/zenodo.17806900)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19557644.svg)](https://doi.org/10.5281/zenodo.19557644)
 
 # DBSOD: Density-Based Spatial Outlier Detection
 
@@ -103,11 +103,11 @@ On the real-world data (check out [this](https://github.com/Kowd-PauUh/dbsod/blo
 ```bibtex
 @software{danylenko2025dbsod, 
   author = {Danylenko, Ivan},
-  doi = {10.5281/zenodo.17806900},
+  doi = {10.5281/zenodo.19557644},
   month = apr,
   title = {{DBSOD: Density-Based Spatial Outlier Detection}},
   url = {https://github.com/Kowd-PauUh/dbsod},
-  version = {0.0.5},
+  version = {0.1.0},
   year = {2026}
 }
 ```
