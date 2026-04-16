@@ -61,9 +61,9 @@ model = DBSOD(
 )
 
 # Fit model and get outlierness scores of the training data points
-# This can be also achieved using `dbsod(X=DATA, eps_space=EPS_SPACE, min_pts=MIN_PTS)`
+# This can be also achieved using:
+#     `model.fit_predict(X=DATA)` or `dbsod(X=DATA, eps_space=EPS_SPACE, min_pts=MIN_PTS)`
 outlierness_scores = model.fit(X=DATA).outlierness_score
-
 print(outlierness_scores)
 ```
 
@@ -71,11 +71,30 @@ The output will be: `array([0. , 0.5, 0. , 0. , 1. ])`.
 
 Below is the visualization of this example:
 
-![Simple Example](examples/figures/00-readme-example.png "Simple Example")
+<img src="examples/figures/00-readme-example.png" width="500" />
 
-On the real-world data (check out [this example](examples/01.%20Real%20Data.ipynb)) result of `DBSOD` would look like:
+Having fitted the `DBSOD`, we can estimate outlierness scores for the new data points:
 
-![Real-World Example](examples/figures/01-real-data.png "Real-World Example")
+```python
+# prepare a 3x3 grid of points
+x, y = np.meshgrid(np.linspace(0.2, 0.5, 3), np.linspace(0.2, 0.5, 3))
+points = np.column_stack([x.ravel(), y.ravel()])
+
+# estimate outlierness score for each new point
+predictions = model.predict(points)
+print(predictions)
+```
+
+The output of this is: `array([0.5, 0. , 0. , 0.5, 0. , 0. , 1. , 0.5, 1. ])`.
+
+Notice how we can use `DBSOD` to estimate outlierness of the points in a grid with an arbitrary resolution. This effectively allows us to create outlierness heatmaps.
+
+On the real-world data (check out [this](examples/01.%20Real%20Data.ipynb) and [this](examples/02.%20Predicting%20on%20New%20Data.ipynb) examples) result of applying `DBSOD` would look like this:
+
+<p align="center">
+  <img src="examples/figures/01-real-data.png" width="500" />
+  <img src="examples/figures/02-predicting-on-new-data.png" width="500" /> 
+</p>
 
 ## Citation
 
