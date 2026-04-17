@@ -23,8 +23,8 @@
 void pbar(
     size_t current,
     size_t total,
-    size_t width = 20,
-    const std::string& desc = ""
+    size_t width,
+    const std::string& desc
 ) {
     static auto last_update = std::chrono::steady_clock::now();
     static size_t last_count = 0;
