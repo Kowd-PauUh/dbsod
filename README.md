@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19557644.svg)](https://doi.org/10.5281/zenodo.19557644)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20027906.svg)](https://doi.org/10.5281/zenodo.20027906)
 
 # DBSOD: Density-Based Spatial Outlier Detection
 
@@ -118,13 +118,13 @@ Given that `len(eps_space)` $\ll N$, where:
 ## Citation
 
 ```bibtex
-@software{danylenko2025dbsod, 
+@software{danylenko2026dbsod, 
   author = {Danylenko, Ivan},
-  doi = {10.5281/zenodo.19557644},
-  month = apr,
+  doi = {10.5281/zenodo.20027906},
+  month = may,
   title = {{DBSOD: Density-Based Spatial Outlier Detection}},
   url = {https://github.com/Kowd-PauUh/dbsod},
-  version = {0.1.0},
+  version = {0.2.0},
   year = {2026}
 }
 ```
