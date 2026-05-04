@@ -12,6 +12,8 @@ While DBSCAN is a widely used clustering algorithm, it only provides a binary la
 
 The algorithm systematically varies the neighborhood size parameter $\epsilon$, evaluating outlierness across multiple density assumptions. By aggregating binary outlier classifications across these scales, it produces a normalized outlierness score for each point, reflecting how consistently the point is identified as an outlier.
 
+It is also possible to estimate outlierness score for unseen data (novelty detection). Here, each new data point is treated as a non-core candidate for expansion of a cluster obtained from training data. The algorithm then estimates the consistency with which a data point does not expand the cluster.
+
 ## Installation
 
 _Note: the package was developed for Linux (manylinux, x86_64) machines._
@@ -97,6 +99,21 @@ On the real-world data (check out [this](https://github.com/Kowd-PauUh/dbsod/blo
   <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/01-real-data.png" width="350" />
   <img src="https://raw.githubusercontent.com/Kowd-PauUh/dbsod/main/examples/figures/02-predicting-on-new-data.png" width="350" /> 
 </p>
+
+<details>
+  <summary>Time and space complexity</summary>
+
+| Method     | Time complexity (worst case) | Space complexity (worst case) |
+| ---------- | ---------------------------- | ----------------------------- |
+| `.fit`     | $O(N^2 \cdot (d + logN))$    | $O(N^2)$                      |
+| `.predict` | $O(N \cdot M \cdot d)$       | $O(N + M)$                    |
+
+Given that `len(eps_space)` $\ll N$, where:  
+&ensp; $N$ &ndash; number of points used to fit the algorithm;  
+&ensp; $M$ &ndash; number of points used to predict scores for;  
+&ensp; $d$ &ndash; point dimensionality. 
+
+</details>
 
 ## Citation
 
